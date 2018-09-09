@@ -15,18 +15,18 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 from typing import List, Dict
 from subprocess import PIPE, Popen
 
+import warnings
 import argparse
 import re
 
 # Regexes
 spaces   = re.compile(r'[\s\t]+')
-newlines = re.compile(r'[(\r\n)\n]+')
+newlines = re.compile(r'(\r\n|\r|\n)+')
 epoch    = re.compile(r'(?<=@)[0-9]+')
 
 # Linux commands
 ZFS_agent_list = 'zfs list -H -o name'
 ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
-
 
 ## Preflight checks; ensure all necessary reference files exist
 
@@ -83,19 +83,24 @@ def flatten(inList: List[List[str]]) -> List[str]:
 
 
 def main(arguments: argparse.Namespace) -> None:
-    if arguments.agents:
-        arguments.agents = flatten(arguments.agents)
-
     # Get a list of ZFS datasets/agents
     datasets = getIO(ZFS_agent_list)
     agents = list(filter(lambda path: 'agents/' in path, datasets))
 
-    for uuid in arguments.agents:
-        if uuid not in agents:
-            print(
+    # Check the requested agents against agents list
+    if arguments.agents:
+        arguments.agents = flatten(arguments.agents)
+        for uuid in arguments.agents:
+            if uuid not in agents:
+                warnings.warn(uuid + ' is not in the dataset, excluding',
+                              stacklevel=2, category=RuntimeWarning)
+                arguments.agents.remove(uuid)
+    else:
+        arguments.agents = agents
 
     # Get snapshot epochs and written size for these agents
-    snaps = list(map(getSnapshots, agents))
+    snaps = list(map(getSnapshots, arguments.agents))
+    print(snaps[0])
 
 
 if __name__ == '__main__':
