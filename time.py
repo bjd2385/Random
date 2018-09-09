@@ -96,7 +96,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     with open(KEYS + agent + (OFFSITE_RETENTION if offsite else LOCAL_RETENTION))\
             as cryptic_policy:
          policy = cryptic_policy.readline().split(':')
-         intra, daily, total, list(map(lambda hours: int(hours) // 24))
+         intra, daily, total, local = list(map(lambda hours: int(hours) // 24,
+                                               policy))
 
 
 def main(arguments: argparse.Namespace) -> None:
