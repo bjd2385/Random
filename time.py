@@ -125,11 +125,13 @@ def main(arguments: argparse.Namespace) -> None:
     else:
         arguments.agents = agents
 
+    agent_identifiers = list(map(basename, arguments.agents))
+
     # Get snapshot epochs and written size for these agents
     snaps = list(map(getSnapshots, arguments.agents))
     local_ret_policies = list(map(decodeRetention, arguments.agents))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
-                                            arguments.agents))
+                                             agent_identifiers))
 
 
 if __name__ == '__main__':
