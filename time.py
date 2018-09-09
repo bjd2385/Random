@@ -32,7 +32,7 @@ ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 KEYS = '/datto/config/keys/'
 
 LOCAL_RETENTION = '.retention'
-
+LOCAL_RETENTION_CHANGES = '.'
 
 ## Preflight checks; ensure all necessary reference files exist
 
