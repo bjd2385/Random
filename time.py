@@ -32,7 +32,7 @@ ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 KEYS = '/datto/config/keys/'
 
 LOCAL_RETENTION = '.retention'
-
+OFFSITE_RETENTION = '.offsiteRetention'
 
 ## Preflight checks; ensure all necessary reference files exist
 
@@ -88,11 +88,14 @@ def flatten(inList: List[List[str]]) -> List[str]:
     return flatList
 
 
-def acquireRetentionPolicy(agent: str) -> str:
+def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     """
     Read the retention policy for an agent from file.
     """
-    with open(KEYS + agent + '.retention')
+    # There's offsite and local retention policies on our appliances.
+    with open(KEYS + agent + (OFFSITE_RETENTION if offsite else LOCAL_RETENTION))\
+            as policy:
+        
 
 
 def main(arguments: argparse.Namespace) -> None:
