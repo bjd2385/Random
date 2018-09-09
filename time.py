@@ -16,11 +16,11 @@ from typing import List, Dict
 from subprocess import PIPE, Popen
 from functools import partial
 from contextlib import contextmanager
+from os.path import basename
 
 import warnings
 import argparse
 import re
-import os
 
 # Regexes
 spaces   = re.compile(r'[\s\t]+')
