@@ -92,13 +92,6 @@ def flatten(inList: List[List[str]]) -> List[str]:
     return flatList
 
 
-def grabFile(path: str) -> str:
-    """
-    Pick a file off the end of a path.
-    """
-    return os.
-
-
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     """
     Read the retention policy for an agent from file.
