@@ -15,7 +15,6 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 from typing import List, Dict
 from subprocess import PIPE, Popen
 from functools import partial
-from contextlib import contextmanager
 from os.path import basename
 
 import warnings
@@ -43,7 +42,6 @@ OFFSITE_RETENTION = '.offsiteRetention'
 ## Collect data
 
 
-@contextmanager
 def getIO(command: str) -> List[str]:
     """
     Get results from terminal commands as lists of lines of text.
@@ -58,7 +56,7 @@ def getIO(command: str) -> List[str]:
     if stdout:
         stdout = re.split(newlines, stdout.decode())
     
-    yield stdout
+    return stdout
 
 
 def getSnapshots(agent: str) -> Dict[int, str]:
@@ -107,8 +105,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
 def main(arguments: argparse.Namespace) -> None:
     # Get a list of ZFS datasets/agents
-    with getIO(ZFS_agent_list) as datasets:
-        agents = list(filter(lambda path: 'agents/' in path, datasets))
+    datasets = list(getIO(ZFS_agent_list))
+    agents = list(filter(lambda path: 'agents/' in path, datasets))
 
     # Check the requested agents against agents list
     if arguments.agents:
@@ -117,7 +115,7 @@ def main(arguments: argparse.Namespace) -> None:
             if uuid not in agents:
                 warnings.warn(uuid + ' is not in the dataset, excluding',
                               stacklevel=2, category=RuntimeWarning)
-                arguments.agents.remove(uuid)
+        arguments.agents.remove(uuid)
         if not arguments.agents:
             warnings.warn('Defaulting to complete dataset')
             arguments.agents = agents
