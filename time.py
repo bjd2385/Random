@@ -15,6 +15,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 from typing import List, Dict
 from subprocess import PIPE, Popen
 from functools import partial
+from contextlib import contextmanager
 
 import warnings
 import argparse
@@ -41,6 +42,7 @@ OFFSITE_RETENTION = '.offsiteRetention'
 ## Collect data
 
 
+@contextmanager
 def getIO(command: str) -> List[str]:
     """
     Get results from terminal commands as lists of lines of text.
