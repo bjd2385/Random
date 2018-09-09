@@ -19,8 +19,6 @@ import warnings
 import argparse
 import re
 
-# Some change
-
 # Regexes
 spaces   = re.compile(r'[\s\t]+')
 newlines = re.compile(r'[(\r\n)\r\n]+')
