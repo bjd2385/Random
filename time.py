@@ -58,7 +58,7 @@ def getIO(command: str) -> List[str]:
     if stdout:
         stdout = re.split(newlines, stdout.decode())
     
-    return stdout
+    yield stdout
 
 
 def getSnapshots(agent: str) -> Dict[int, str]:
