@@ -107,8 +107,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
 def main(arguments: argparse.Namespace) -> None:
     # Get a list of ZFS datasets/agents
-    datasets = list(getIO(ZFS_agent_list))
-    agents = list(filter(lambda path: 'agents/' in path, datasets))
+    with getIO(ZFS_agent_list) as datasets:
+        agents = list(filter(lambda path: 'agents/' in path, datasets))
 
     # Check the requested agents against agents list
     if arguments.agents:
@@ -117,7 +117,7 @@ def main(arguments: argparse.Namespace) -> None:
             if uuid not in agents:
                 warnings.warn(uuid + ' is not in the dataset, excluding',
                               stacklevel=2, category=RuntimeWarning)
-        arguments.agents.remove(uuid)
+                arguments.agents.remove(uuid)
         if not arguments.agents:
             warnings.warn('Defaulting to complete dataset')
             arguments.agents = agents
