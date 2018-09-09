@@ -14,6 +14,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 
 from typing import List, Dict
 from subprocess import PIPE, Popen
+from functools import partial
 
 import warnings
 import argparse
@@ -99,7 +100,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
     # Now let's decode what's _really_ going to happen to this data
     intra, daily, total, local = list(map(lambda hrs: int(hrs) // 24, policy))
-    
+
 
 
 def main(arguments: argparse.Namespace) -> None:
@@ -123,7 +124,9 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Get snapshot epochs and written size for these agents
     snaps = list(map(getSnapshots, arguments.agents))
-    retention_policies = list(map(decodeRetention, arguments.agents))
+    local_ret_policies = list(map(decodeRetention, arguments.agents))
+    offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
+                                            arguments.agents))
 
 
 if __name__ == '__main__':
