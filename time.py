@@ -111,11 +111,10 @@ def main(arguments: argparse.Namespace) -> None:
             if uuid not in agents:
                 warnings.warn(uuid + ' is not in the dataset, excluding',
                               stacklevel=2, category=RuntimeWarning)
-                arguments.agents.remove(uuid)
-
-                if not arguments.agents:
-                    warnings.warn('Defaulting to complete dataset')
-                    arguments.agents = agents
+        arguments.agents.remove(uuid)
+        if not arguments.agents:
+            warnings.warn('Defaulting to complete dataset')
+            arguments.agents = agents
     else:
         arguments.agents = agents
 
