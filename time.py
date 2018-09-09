@@ -107,7 +107,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
 def main(arguments: argparse.Namespace) -> None:
     # Get a list of ZFS datasets/agents
-    datasets = getIO(ZFS_agent_list)
+    datasets = list(getIO(ZFS_agent_list))
     agents = list(filter(lambda path: 'agents/' in path, datasets))
 
     # Check the requested agents against agents list
