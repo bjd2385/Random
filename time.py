@@ -105,7 +105,6 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     intra, daily, total, local = list(map(lambda hrs: int(hrs) // 24, policy))
 
 
-
 def main(arguments: argparse.Namespace) -> None:
     # Get a list of ZFS datasets/agents
     datasets = getIO(ZFS_agent_list)
