@@ -100,7 +100,8 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Get snapshot epochs and written size for these agents
     snaps = list(map(getSnapshots, arguments.agents))
-    print(snaps[0])
+
+    
 
 
 if __name__ == '__main__':
