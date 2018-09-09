@@ -82,6 +82,13 @@ def flatten(inList: List[List[str]]) -> List[str]:
     return flatList
 
 
+def acquireRetentionPolicy(agent: str) -> str:
+    """
+    Read the retention policy for an agent from file.
+    """
+    with open(KEYS + agent + '.')
+
+
 def main(arguments: argparse.Namespace) -> None:
     # Get a list of ZFS datasets/agents
     datasets = getIO(ZFS_agent_list)
@@ -101,7 +108,7 @@ def main(arguments: argparse.Namespace) -> None:
     # Get snapshot epochs and written size for these agents
     snaps = list(map(getSnapshots, arguments.agents))
 
-    
+
 
 
 if __name__ == '__main__':
