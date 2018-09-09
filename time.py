@@ -95,7 +95,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # There's offsite and local retention policies on our appliances.
     with open(KEYS + agent + (OFFSITE_RETENTION if offsite else LOCAL_RETENTION))\
             as policy:
-        ...
+        days: List[int] = 
 
 
 def main(arguments: argparse.Namespace) -> None:
