@@ -117,8 +117,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Get snapshot epochs and written size for these agents
     snaps = list(map(getSnapshots, arguments.agents))
-
-
+    retention_policies = list(map(decodeRetention, arguments.agents))
 
 
 if __name__ == '__main__':
