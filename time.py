@@ -20,6 +20,7 @@ from contextlib import contextmanager
 import warnings
 import argparse
 import re
+import os
 
 # Regexes
 spaces   = re.compile(r'[\s\t]+')
@@ -89,6 +90,13 @@ def flatten(inList: List[List[str]]) -> List[str]:
         for string in subList:
             flatList.append(string)
     return flatList
+
+
+def grabFile(path: str) -> str:
+    """
+    Pick a file off the end of a path.
+    """
+    return os.
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
