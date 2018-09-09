@@ -28,6 +28,13 @@ epoch    = re.compile(r'(?<=@)[0-9]+')
 ZFS_agent_list = 'zfs list -H -o name'
 ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 
+# Key variables
+KEYS = '/datto/config/keys/'
+
+RETENTION = '.retention'
+
+
+
 ## Preflight checks; ensure all necessary reference files exist
 
 
@@ -86,7 +93,7 @@ def acquireRetentionPolicy(agent: str) -> str:
     """
     Read the retention policy for an agent from file.
     """
-    with open(KEYS + agent + '.')
+    with open(KEYS + agent + '.retention')
 
 
 def main(arguments: argparse.Namespace) -> None:
