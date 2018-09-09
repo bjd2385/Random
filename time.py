@@ -21,7 +21,7 @@ import re
 
 # Regexes
 spaces   = re.compile(r'[\s\t]+')
-newlines = re.compile(r'[\r\n]+')
+newlines = re.compile(r'[(\r\n)\r\n]+')
 epoch    = re.compile(r'(?<=@)[0-9]+')
 
 # Linux commands
