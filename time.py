@@ -47,7 +47,8 @@ BACKUP_SCHEDULE   = '.schedule'
 BACKUP_INTERVAL   = '.interval'
 OFFSITE_POINTS    = '.offSitePoints'
 LOCAL_SCHEDULE    = '.schedule'
-OFFSITE_SCHEDULE  = '.off'
+OFFSITE_SCHEDULE  = '.offsiteSchedule'
+
 
 NOW = datetime.datetime.now()
 
