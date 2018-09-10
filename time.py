@@ -13,7 +13,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 
 import sys
 
-version = sys.version_info[0]
+version = sys.version_info.major
 if version < 3:
     raise Exception('Must use Python 3; I see {}'.format(version))
 
