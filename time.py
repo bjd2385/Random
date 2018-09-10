@@ -294,8 +294,6 @@ def main(arguments: argparse.Namespace) -> None:
         schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
 
 
-
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
 
