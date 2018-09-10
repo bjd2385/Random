@@ -36,10 +36,10 @@ ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 # Key path and extensions
 KEYS = '/datto/config/keys/'
 
-LOCAL_RETENTION = '.retention'
+LOCAL_RETENTION   = '.retention'
 OFFSITE_RETENTION = '.offsiteRetention'
-BACKUP_SCHEDULE = '.schedule'
-BACKUP_INTERVAL = '.interval'
+BACKUP_SCHEDULE   = '.schedule'
+BACKUP_INTERVAL   = '.interval'
 
 NOW = datetime.datetime.now()
 
@@ -192,10 +192,42 @@ class ConvertJSON:
 
         return convert(nestLevel()[0])
 
-    def find(self, key: Any, nestedDicts: Dict) -> Dict:
+    @staticmethod
+    def find(key: Any, nestedDicts: Dict) -> Any:
         """
-        Find the { key, value } pair.
+        Return the first occurrence of value associated with `key`. O(n) for `n`
+        items in the flattened data.
         """
+
+        def traverse(nested: Dict) -> Any:
+            nonlocal key
+            for ky, value in list(nested.items()):
+                if ky == key:
+                    return value
+                if type(value) is dict:
+                    res = traverse(value)
+                    if res:
+                        return res
+
+        return traverse(nestedDicts)
+
+    @staticmethod
+    def findAll(key: Any, nestedDicts: Dict) -> List:
+        """
+        Return all occurrences of values associated with `key`, if any. Again, O(n).
+        """
+        occurrences = []
+
+        def traverse(nested: Dict) -> None:
+            nonlocal key, occurrences
+            for ky, value in list(nested.items()):
+                if ky == key:
+                    occurrences.append(value)
+                if type(value) is dict:
+                    traverse(value)
+
+        traverse(nestedDicts)
+        return occurrences
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
@@ -220,7 +252,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Check the requested agents against agents list
     if arguments.agents:
-        arguments.agents = flatten(arguments.agents)
+        arguments.agents = flatten(arguments.agents) # Mypy is wrong
         for uuid in arguments.agents:
             if uuid not in agents:
                 warnings.warn(uuid + ' is not in the dataset, excluding',
@@ -234,12 +266,11 @@ def main(arguments: argparse.Namespace) -> None:
 
     agent_identifiers = list(map(basename, arguments.agents))
 
-    # Get all the necessary data
+    # Grab data about snapshots and retention policies
     snaps = list(map(getSnapshots, arguments.agents))
     local_ret_policies = list(map(decodeRetention, arguments.agents))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
-    # backup_schedule =
 
 
 if __name__ == '__main__':
