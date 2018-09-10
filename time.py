@@ -161,7 +161,6 @@ class ConvertJSON:
 
                 start, end = result.span()
                 substring = keyData[:end]
-                print(substring)
                 keyData = keyData[end:]
 
                 if substring.endswith(';'):
@@ -188,13 +187,11 @@ class ConvertJSON:
             """
             Convert our multi-level list to a dictionary of dictionaries ...
             """
-            print(multiLevelArray)
             length = len(multiLevelArray)
             currentDict = {}
 
             for i, j in zip(range(0, length - 1, 2), range(1, length, 2)):
                 key, val = multiLevelArray[i], multiLevelArray[j]
-                print(key, val)
                 if type(val) is list:
                     currentDict[key] = convert(val)
                 else:
