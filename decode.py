@@ -131,7 +131,7 @@ def findAll(key: Any, nestedDicts: Dict) -> List:
     """
     occurrences = []
 
-    def traverse(nested: Dict) -> Any:
+    def traverse(nested: Dict) -> None:
         nonlocal key, occurrences
         for ky, value in list(nested.items()):
             if ky == key:
@@ -139,6 +139,7 @@ def findAll(key: Any, nestedDicts: Dict) -> List:
             if type(value) is dict:
                 traverse(value)
 
+    traverse(nestedDicts)
     return occurrences
 
 
