@@ -115,6 +115,7 @@ def find(key: Any, nestedDicts: Dict) -> Optional[Dict]:
     def traverse(nested: Dict) -> Any:
         nonlocal key
         for ky, value in list(nested.items()):
+            print(ky)
             if ky == key:
                 return value
             if type(value) is list:
