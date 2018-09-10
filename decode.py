@@ -127,4 +127,4 @@ def find(key: Any, nestedDicts: Dict) -> Optional[Dict]:
 
 if __name__ == '__main__':
     print(decodeJSON('data.txt'))
-    print(find(0, decodeJSON('data.txt')))
+    print(find('device', decodeJSON('data.txt')))
