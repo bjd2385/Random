@@ -273,7 +273,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Grab data about snapshots and retention policies
     snaps = list(map(getSnapshots, arguments.agents))
-    local_ret_policies = list(map(decodeRetention, arguments.agents))
+    local_ret_policies = list(map(decodeRetention, agent_identifiers))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
 
