@@ -277,6 +277,8 @@ def main(arguments: argparse.Namespace) -> None:
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
 
+    print(local_ret_policies, offsite_ret_policies)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
