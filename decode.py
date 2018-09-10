@@ -117,7 +117,7 @@ def find(key: Any, nestedDicts: Dict) -> Optional[Dict]:
         for ky, value in list(nested.items()):
             if ky == key:
                 return value
-            elif type(value) is list:
+            if type(value) is list:
                 res = traverse(value)
                 if res:
                     return res
