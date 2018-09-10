@@ -54,7 +54,7 @@ OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
 TRANSFERS_DONE    = '.transfers'        # `transfer`
 
 # Other configs
-SPEED_LIMIT = '/datto/config/local/'
+SPEED_LIMIT = '/datto/config/local/speedLimit'
 
 NOW = datetime.datetime.now()
 
