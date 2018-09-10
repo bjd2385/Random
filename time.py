@@ -137,7 +137,7 @@ def main(arguments: argparse.Namespace) -> None:
     local_ret_policies = list(map(decodeRetention, arguments.agents))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
-    backup_schedule =
+    # backup_schedule =
 
 
 if __name__ == '__main__':
