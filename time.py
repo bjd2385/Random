@@ -98,8 +98,9 @@ def flatten(inList: List[List[str]]) -> List[str]:
 
 def decode(str) -> Dict:
     """
-    Decode our JSON  
+    Decode our keys' JSON.
     """
+    
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
