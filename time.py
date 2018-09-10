@@ -270,6 +270,7 @@ def main(arguments: argparse.Namespace) -> None:
         arguments.agents = agents
 
     agent_identifiers = list(map(basename, arguments.agents))
+    print(agent_identifiers)
 
     # Grab data about snapshots and retention policies
     snaps = list(map(getSnapshots, arguments.agents))
