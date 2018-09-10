@@ -266,7 +266,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Check the requested agents against absolute list of agents
     if arguments.agents:
-        arguments.agents = flatten(arguments.agents) # Mypy is wrong
+        arguments.agents = flatten(arguments.agents)
         for uuid in arguments.agents:
             if uuid not in agents:
                 warnings.warn(uuid + ' is not in the dataset, excluding',
