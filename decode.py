@@ -107,7 +107,7 @@ def decodeJSON(key: str) -> Dict:
     return convert(nestLevel()[0])
 
 
-def find(key: Any, nestedDicts: Dict) -> Optional[Dict]:
+def find(key: Any, nestedDicts: Dict) -> Any:
     """
     Return the first occurrence of value associated with `key`. O(n) for `n`
     items in the flattened data.
@@ -125,6 +125,24 @@ def find(key: Any, nestedDicts: Dict) -> Optional[Dict]:
     return traverse(nestedDicts)
 
 
+def findAll(key: Any, nestedDicts: Dict) -> List:
+    """
+    Return all occurrences of values associated with `key`, if any. Again, O(n).
+    """
+    occurrences = []
+
+    def traverse(nested: Dict) -> Any:
+        nonlocal key, occurrences
+        for ky, value in list(nested.items()):
+            if ky == key:
+                occurrences.append(value)
+            if type(value) is dict:
+                traverse(value)
+
+    return occurrences
+
+
 if __name__ == '__main__':
     print(decodeJSON('data.txt'))
     print(find('device', decodeJSON('data.txt')))
+    print(findAll('device', decodeJSON('data.txt')))
