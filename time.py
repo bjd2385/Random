@@ -1,7 +1,7 @@
 #! /usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-r"""
+u"""
 Estimate the amount of time it's going to take to complete offsite sync.
 
 I've had a number of partners ask me whether they should order a RoundTrip.
