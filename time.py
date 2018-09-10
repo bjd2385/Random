@@ -48,9 +48,9 @@ LOCAL_SCHEDULE    = '.schedule'         # `schedule`
 BACKUP_INTERVAL   = '.interval'         # Just a number, minutes
 
 # offsite
-OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
 OFFSITE_RETENTION = '.offsiteRetention' # split(':')
 OFFSITE_SCHEDULE  = '.offsiteSchedule'  # `schedule`
+OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
 TRANSFERS_DONE    = '.transfers'        # `transfer`
 
 NOW = datetime.datetime.now()
