@@ -250,7 +250,7 @@ def main(arguments: argparse.Namespace) -> None:
     datasets = list(getIO(ZFS_agent_list))
     agents = list(filter(lambda path: 'agents/' in path, datasets))
 
-    # Check the requested agents against agents list
+    # Check the requested agents against absolute list of agents
     if arguments.agents:
         arguments.agents = flatten(arguments.agents) # Mypy is wrong
         for uuid in arguments.agents:
