@@ -42,14 +42,16 @@ ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 # Key path and extensions
 KEYS = '/datto/config/keys/'
 
+# local
 LOCAL_RETENTION   = '.retention'        # split(':')
-OFFSITE_RETENTION = '.offsiteRetention' # split(':')
-BACKUP_INTERVAL   = '.interval'         # Just a number, minutes
-OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
 LOCAL_SCHEDULE    = '.schedule'         # `schedule`
+BACKUP_INTERVAL   = '.interval'         # Just a number, minutes
+
+# offsite
+OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
+OFFSITE_RETENTION = '.offsiteRetention' # split(':')
 OFFSITE_SCHEDULE  = '.offsiteSchedule'  # `schedule`
 TRANSFERS_DONE    = '.transfers'        # `transfer`
-
 
 NOW = datetime.datetime.now()
 
