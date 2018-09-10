@@ -12,7 +12,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 """
 
 
-from typing import List, Dict, Optional
+from typing import List, Dict, Optional, Any
 from subprocess import PIPE, Popen
 from functools import partial
 from os.path import basename
@@ -192,9 +192,10 @@ class ConvertJSON:
 
         return convert(nestLevel()[0])
 
-    @staticmethod
-    def find(nestedDicts: Dict) -> Dict:
-        ...
+    def find(self, key: Any, nestedDicts: Dict) -> Dict:
+        """
+        Find the { key, value } pair.
+        """
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
