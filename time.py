@@ -105,10 +105,10 @@ class ConvertJSON:
 
     # Match these 'tokens'
     integer = r'^i:[0-9]+;?'
-    string = r'^s:[0-9]+:\"[^\"]*\";?'
-    array = r'^a:[0-9]+:{'
+    string  = r'^s:[0-9]+:\"[^\"]*\";?'
+    array   = r'^a:[0-9]+:{'
     boolean = r'^b:[01];?'
-    endArr = r'^}'
+    endArr  = r'^}'
 
     lexer = re.compile('({}|{}|{}|{}|{})'.format(integer, string, array, endArr,
                                                  boolean))
