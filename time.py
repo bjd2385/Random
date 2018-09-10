@@ -13,7 +13,8 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 
 import sys
 
-if 
+if sys.version_info[0] < 3:
+    
 
 
 from typing import List, Dict, Optional, Any
