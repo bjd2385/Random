@@ -12,7 +12,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 """
 
 
-from typing import List, Dict
+from typing import List, Dict, Optional
 from subprocess import PIPE, Popen
 from functools import partial
 from os.path import basename
@@ -28,19 +28,6 @@ spaces   = re.compile(r'[\s\t]+')
 newlines = re.compile(r'\n+')
 epoch    = re.compile(r'(?<=@)[0-9]+')
 schedule = re.compile(r'\"0\";i:[0-9]{1,3};') # pluck out hours of backups
-
-# Match these 'tokens'
-integer = r'^i:[0-9]+;?'
-string  = r'^s:[0-9]+:\"[^\"]*\";?'
-array   = r'^a:[0-9]+:{'
-boolean = r'^b:[01];?'
-endArr  = r'^}'
-
-lexer = re.compile('({}|{}|{}|{}|{})'.format(integer, string, array, endArr,
-                                             boolean))
-
-# `:' between parentheses will break unpacking if we just `.split(':')`
-colonStringSplit = re.compile(r'(?<=s):|:(?=")')
 
 # Shell
 ZFS_agent_list = 'zfs list -H -o name'
@@ -111,13 +98,32 @@ class InvalidArrayFormat(SyntaxError):
     """
 
 
-class ConvertJSON
+class ConvertJSON:
+    """
+    Methods grouped together for working on our (*ahem* horrid) JSON.
+    """
+
+    # Match these 'tokens'
+    integer = r'^i:[0-9]+;?'
+    string = r'^s:[0-9]+:\"[^\"]*\";?'
+    array = r'^a:[0-9]+:{'
+    boolean = r'^b:[01];?'
+    endArr = r'^}'
+
+    lexer = re.compile('({}|{}|{}|{}|{})'.format(integer, string, array, endArr,
+                                                 boolean))
+
+    # `:' between parentheses will break unpacking if we just `.split(':')`
+    colonStringSplit = re.compile(r'(?<=s):|:(?=")')
+
+    @staticmethod
     def decode(key: str) -> Dict:
         """
-        Decode our JSON with regex into something a little nicer. In Python 3.5, if
-        I'm not mistaken, dictionaries don't necessarily keep their order, so I've
-        decided to use lists instead to unpack all of the keyData into. Then a second
-        pass converts this list of lists ... into a dictionary of dictionaries ...
+        Decode our JSON with regex into something a little nicer. In Python 3.5,
+        if I'm not mistaken, dictionaries don't necessarily keep their order, so
+        I've decided to use lists instead to unpack all of the keyData into.
+        Then a second pass converts this list of lists ... into a dictionary of
+        dictionaries ...
         """
         if not os.path.isfile(key):
             raise FileNotFoundError('File {} does not exist'.format(key))
@@ -139,7 +145,7 @@ class ConvertJSON
                 result = re.search(lexer, keyData)
 
                 if not result:
-                    # Show what's left that it couldn't 'parse' so we can debug it
+                    # Show what it's stuck on so we can debug it
                     raise InvalidArrayFormat(keyData)
 
                 start, end = result.span()
@@ -186,6 +192,10 @@ class ConvertJSON
             return currentDict
 
         return convert(nestLevel()[0])
+
+    @staticmethod
+    def find(nestedDicts: Dict) -> Dict:
+        ...
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
