@@ -291,7 +291,8 @@ def main(arguments: argparse.Namespace) -> None:
     JSONdecoder = ConvertJSON()
     schedules = []
     for agent in arguments.agents:
-        schedules.append(JSONdecoder.decode(agent + LOCAL_SCHEDULE))
+        schedules.append(JSONdecoder.decode(KEYS + agent_identifiers
+                                            + LOCAL_SCHEDULE))
     print(schedules)
 
 
