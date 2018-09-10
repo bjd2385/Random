@@ -100,7 +100,7 @@ class InvalidArrayFormat(SyntaxError):
 
 class ConvertJSON:
     """
-    Methods grouped together for working on our (*ahem* horrid) JSON.
+    Methods for working on our (*ahem* horrid) JSON.
     """
 
     # Match these 'tokens'
@@ -116,8 +116,7 @@ class ConvertJSON:
     # `:' between parentheses will break unpacking if we just `.split(':')`
     colonStringSplit = re.compile(r'(?<=s):|:(?=")')
 
-    @staticmethod
-    def decode(key: str) -> Dict:
+    def decode(self, key: str) -> Dict:
         """
         Decode our JSON with regex into something a little nicer. In Python 3.5,
         if I'm not mistaken, dictionaries don't necessarily keep their order, so
@@ -142,7 +141,7 @@ class ConvertJSON:
 
             while keyData:
                 # Bite a piece at a time. Can't wait till assignment expressions!
-                result = re.search(lexer, keyData)
+                result = re.search(self.lexer, keyData)
 
                 if not result:
                     # Show what it's stuck on so we can debug it
@@ -163,7 +162,7 @@ class ConvertJSON:
                     _, value = substring.split(':')
                     currentList.append(int(value))
                 elif substring.startswith('s'):
-                    _, _, value = re.split(colonStringSplit, substring)
+                    _, _, value = re.split(self.colonStringSplit, substring)
                     value = value[1:len(value) - 1]
                     currentList.append(value)
                 elif substring.startswith('b'):
