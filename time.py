@@ -42,11 +42,6 @@ BACKUP_INTERVAL = '.interval'
 
 NOW = datetime.datetime.now()
 
-## Preflight checks; ensure all necessary reference files exist
-
-
-## Collect data
-
 
 def getIO(command: str) -> List[str]:
     """
