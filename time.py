@@ -295,7 +295,7 @@ def main(arguments: argparse.Namespace) -> None:
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__.[0])
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
 
     # It's okay to list arguments following `-a`, or use multiple `-a`'s.
     # They'll be `flattened` into the same list anyway.
