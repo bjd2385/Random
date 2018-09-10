@@ -43,8 +43,7 @@ ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 KEYS = '/datto/config/keys/'
 
 LOCAL_RETENTION   = '.retention'
-OFFSITE_RETENTION = '.offsiteRetention'
-BACKUP_SCHEDULE   = '.schedule'         # schedule
+OFFSITE_RETENTION = '.offsiteRetention' # 
 BACKUP_INTERVAL   = '.interval'         # Just a number, minutes
 OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
 LOCAL_SCHEDULE    = '.schedule'         # schedule
