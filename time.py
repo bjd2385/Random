@@ -45,6 +45,8 @@ LOCAL_RETENTION   = '.retention'
 OFFSITE_RETENTION = '.offsiteRetention'
 BACKUP_SCHEDULE   = '.schedule'
 BACKUP_INTERVAL   = '.interval'
+OFFSITE_POINTS    = '.offSitePoints'
+
 
 NOW = datetime.datetime.now()
 
