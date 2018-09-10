@@ -15,7 +15,7 @@ import sys
 
 version = sys.version_info.major
 if version < 3:
-    raise Exception('Must use Python 3; I see {}'.format(version))
+    raise Exception('Must use Python 3, you\'re using Python {}'.format(version))
 
 from typing import List, Dict, Optional, Any
 from subprocess import PIPE, Popen
