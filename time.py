@@ -96,13 +96,6 @@ def flatten(inList: List[List[str]]) -> List[str]:
     return flatList
 
 
-def decode(str) -> Dict:
-    """
-    Decode our keys' JSON.
-    """
-
-
-
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     """
     Read the retention policy for an agent from file.
