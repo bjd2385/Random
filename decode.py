@@ -118,7 +118,7 @@ def find(key: Any, nestedDicts: Dict) -> Optional[Dict]:
             print(ky)
             if ky == key:
                 return value
-            if type(value) is list:
+            if type(value) is dict:
                 res = traverse(value)
                 if res:
                     return res
