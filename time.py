@@ -289,7 +289,8 @@ def main(arguments: argparse.Namespace) -> None:
     schedules = []
     for agent in agent_identifiers:
         schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
-    print(schedules)
+
+    
 
 
 if __name__ == '__main__':
