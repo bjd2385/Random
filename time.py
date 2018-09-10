@@ -100,7 +100,7 @@ def decode(str) -> Dict:
     """
     Decode our keys' JSON.
     """
-    
+
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
