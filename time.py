@@ -295,7 +295,10 @@ def main(arguments: argparse.Namespace) -> None:
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[1])
+    parser = argparse.ArgumentParser(
+        description='Estimate the amount of time it\'s going to take to '
+                    'complete offsite sync.'
+    )
 
     # It's okay to list arguments following `-a`, or use multiple `-a`'s.
     # They'll be `flattened` into the same list anyway.
