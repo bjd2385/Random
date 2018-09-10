@@ -98,7 +98,7 @@ def flatten(inList: List[List[str]]) -> List[str]:
 
 def decode(str) -> Dict:
     """
-    Decode our  
+    Decode our JSON  
     """
 
 
