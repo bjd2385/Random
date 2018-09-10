@@ -44,8 +44,8 @@ KEYS = '/datto/config/keys/'
 
 LOCAL_RETENTION   = '.retention'
 OFFSITE_RETENTION = '.offsiteRetention'
-BACKUP_SCHEDULE   = '.schedule'
-BACKUP_INTERVAL   = '.interval'         # 
+BACKUP_SCHEDULE   = '.schedule'         # schedule
+BACKUP_INTERVAL   = '.interval'         # Just a number, minutes
 OFFSITE_POINTS    = '.offSitePoints'    # Just numbers
 LOCAL_SCHEDULE    = '.schedule'         # schedule
 OFFSITE_SCHEDULE  = '.offsiteSchedule'  # schedule
