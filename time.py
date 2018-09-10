@@ -93,7 +93,7 @@ def getSnapshots(agent: str) -> Dict[int, str]:
     return dict(snapshots)
 
 
-def flatten(inList: List[List[str]]) -> List[str]:
+def flatten(inList: List[List]) -> List:
     """
     Similar to Haskell's `concat :: [[a]] -> [a]`.
     """
