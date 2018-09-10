@@ -19,22 +19,28 @@ from os.path import basename
 
 import warnings
 import argparse
+import datetime
 import re
 
 # Regexes
 spaces   = re.compile(r'[\s\t]+')
-newlines = re.compile(r'[(\r\n)\r\n]+')
+newlines = re.compile(r'\n+')
 epoch    = re.compile(r'(?<=@)[0-9]+')
+schedule = re.compile(r'\"0\";i:[0-9]{1,3};') # pluck out hours of backups
 
 # Shell
 ZFS_agent_list = 'zfs list -H -o name'
 ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 
-# Key variables
+# Key path and extensions
 KEYS = '/datto/config/keys/'
 
 LOCAL_RETENTION = '.retention'
 OFFSITE_RETENTION = '.offsiteRetention'
+BACKUP_SCHEDULE = '.schedule'
+BACKUP_INTERVAL = '.interval'
+
+NOW = datetime.datetime.now()
 
 ## Preflight checks; ensure all necessary reference files exist
 
@@ -90,6 +96,12 @@ def flatten(inList: List[List[str]]) -> List[str]:
     return flatList
 
 
+def decode(str) -> Dict:
+    """
+    Decode our  
+    """
+
+
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     """
     Read the retention policy for an agent from file.
@@ -101,6 +113,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
     # Now let's decode what's _really_ going to happen to this data
     intra, daily, total, local = list(map(lambda hrs: int(hrs) // 24, policy))
+
+    # FIXME
 
 
 def main(arguments: argparse.Namespace) -> None:
@@ -124,11 +138,12 @@ def main(arguments: argparse.Namespace) -> None:
 
     agent_identifiers = list(map(basename, arguments.agents))
 
-    # Get snapshot epochs and written size for these agents
+    # Get all the necessary data
     snaps = list(map(getSnapshots, arguments.agents))
     local_ret_policies = list(map(decodeRetention, arguments.agents))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
+    backup_schedule =
 
 
 if __name__ == '__main__':
