@@ -299,8 +299,8 @@ def main(arguments: argparse.Namespace) -> None:
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description=__doc__)
 
-    # It's okay to list arguments following `-a`, or use multiple `-a`'s. They'll
-    # be `flattened` into the same list anyway.
+    # It's okay to list arguments following `-a`, or use multiple `-a`'s.
+    # They'll be `flattened` into the same list anyway.
     parser.add_argument('-a', '--agents', type=str, action='append', 
         nargs='+', help='Specific agents to test offsite sync.'
     )
