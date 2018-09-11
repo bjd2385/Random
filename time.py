@@ -303,7 +303,6 @@ def main(arguments: argparse.Namespace) -> None:
                            schedules))
 
 
-
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
         description='Estimate the amount of time it\'s going to take to '
