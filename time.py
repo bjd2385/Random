@@ -255,9 +255,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
     # Now let's decode what's _really_ going to happen to this data
     intra, daily, total, local = list(map(lambda hrs: int(hrs) // 24, policy))
-
-    # FIXME
-
+    
     return [intra, daily, total, local]
 
 
