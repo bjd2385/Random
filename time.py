@@ -12,7 +12,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 """
 
 # TODO: Take modifications of retention and backups into account
-# TODO: Implement exponentially-weighted moving average filtering to the series
+# TODO: Implement EWMA to upload series
 
 import sys
 
