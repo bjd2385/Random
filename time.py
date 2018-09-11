@@ -264,7 +264,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
     # intra: 1d - 31d
     # daily: 1w - 26w
-    # weekly: 1m - 
+    # weekly: 1m - 24m, or forever
 
     return [intra, daily, weekly, total]
 
