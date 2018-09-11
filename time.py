@@ -284,7 +284,6 @@ def main(arguments: argparse.Namespace) -> None:
         arguments.agents = agents
 
     agent_identifiers = list(map(basename, arguments.agents))
-    print(agent_identifiers)
 
     # Grab data about snapshots and retention policies
     snaps = list(map(getSnapshots, arguments.agents))
@@ -292,14 +291,17 @@ def main(arguments: argparse.Namespace) -> None:
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
 
-    # Decode schedule
+    # Decode schedules and store them in a list.
     JSONdecoder = ConvertJSON()
     schedules = []
     for agent in agent_identifiers:
         schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
+
+    # Map these schedules to a function that'll find all the hours we're
+    # taking backups. We're still accumulating data.
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
-    print(backupHours)
+    
 
 
 if __name__ == '__main__':
