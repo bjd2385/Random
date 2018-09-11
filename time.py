@@ -308,6 +308,8 @@ def main(arguments: argparse.Namespace) -> None:
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
 
+    # 
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
