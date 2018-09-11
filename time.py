@@ -263,7 +263,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     intra, daily, weekly, total = policy
 
     # intra: 1d - 31d
-    # daily: 
+    # daily: 1w - 26w
+    # 
 
     return [intra, daily, weekly, total]
 
