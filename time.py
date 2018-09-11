@@ -11,6 +11,9 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 © Brandon Doyle, 2018
 """
 
+# TODO: Take modifications of retention and backups into account
+# TODO: 
+
 import sys
 
 version = sys.version_info.major
@@ -308,7 +311,7 @@ def main(arguments: argparse.Namespace) -> None:
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
 
-    # 
+    #
 
 
 if __name__ == '__main__':
