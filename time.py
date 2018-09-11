@@ -38,6 +38,7 @@ transfer = re.compile(r'[0-9]+(?=:)')
 # Shell
 ZFS_agent_list = 'zfs list -H -o name'
 ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
+SS_Options = 'speedsync options'
 
 # Key path and extensions
 KEYS = '/datto/config/keys/'
