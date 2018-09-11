@@ -260,7 +260,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
 
     # Now let's decode what's _really_ going to happen to this data. Everything
     # is dependent upon the last number in the 4-tuple.
-    intra, 
+    intra, daily, 
 
 
 def main(arguments: argparse.Namespace) -> None:
