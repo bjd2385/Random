@@ -226,36 +226,27 @@ class ConvertJSON:
         return traverse(nestedDicts)
 
     @staticmethod
-    def findAll(key: Any, nestedDicts: Dict) -> List:
+    def findAll(key: Any, nestedDicts: Dict, byValue: bool = False) -> List:
         """
-        Return all occurrences of values associated with `key`, if any. Again, O(n).
+        Return all occurrences of values associated with `key`, if any. Again,
+        O(n). If `byValue`, searches by value and returns the associated keys.
         """
         occurrences = []
 
         def traverse(nested: Dict) -> None:
             nonlocal key, occurrences
             for ky, value in list(nested.items()):
-                if ky == key:
-                    occurrences.append(value)
+                if byValue:
+                    if value == key:
+                        occurrences.append(ky)
+                else:
+                    if ky == key:
+                        occurrences.append(value)
                 if type(value) is dict:
                     traverse(value)
 
         traverse(nestedDicts)
         return occurrences
-
-    @staticmethod
-    def findAllByValue(value: Any, nestedDicts: Dict) -> List:
-        """
-        Same as `findAll`, just by value rather than key.
-        """
-        occurrences = []
-
-        def traverse(nested: Dict) -> None:
-            nonlocal value, occurrences
-            for key, val in list(nested.items()):
-
-                if val == value:
-                    occurrences.append(key)
 
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
@@ -306,7 +297,9 @@ def main(arguments: argparse.Namespace) -> None:
     schedules = []
     for agent in agent_identifiers:
         schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
-    backupHours = JSONdecoder.findAll()
+    backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
+                           schedules))
+    print(backupHours)
 
 
 if __name__ == '__main__':
