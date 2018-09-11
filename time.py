@@ -261,7 +261,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # Now let's decode what's _really_ going to happen to this data
     intra, daily, total, local = list(map(lambda hrs: int(hrs) // 24, policy))
 
-    return [intra, daily, total, local]
+    
 
 
 def main(arguments: argparse.Namespace) -> None:
@@ -301,7 +301,7 @@ def main(arguments: argparse.Namespace) -> None:
     # taking backups. We're still accumulating data.
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
-    
+
 
 
 if __name__ == '__main__':
