@@ -258,9 +258,9 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
             as cryptic_policy:
          policy = cryptic_policy.readline().split(':')
 
-    # Now let's decode what's _really_ going to happen to this data. Everything is
-    # dependent upon the last number in the 4-tuple.
-
+    # Now let's decode what's _really_ going to happen to this data. Everything
+    # is dependent upon the last number in the 4-tuple.
+    intra, 
 
 
 def main(arguments: argparse.Namespace) -> None:
