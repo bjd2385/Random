@@ -243,6 +243,20 @@ class ConvertJSON:
         traverse(nestedDicts)
         return occurrences
 
+    @staticmethod
+    def findAllByValue(value: Any, nestedDicts: Dict) -> List:
+        """
+        Same as `findAll`, just by value rather than key.
+        """
+        occurrences = []
+
+        def traverse(nested: Dict) -> None:
+            nonlocal value, occurrences
+            for key, val in list(nested.items()):
+
+                if val == value:
+                    occurrences.append(key)
+
 
 def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     """
@@ -292,6 +306,7 @@ def main(arguments: argparse.Namespace) -> None:
     schedules = []
     for agent in agent_identifiers:
         schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
+    backupHours = JSONdecoder.findAll()
 
 
 if __name__ == '__main__':
