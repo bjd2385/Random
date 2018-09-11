@@ -265,6 +265,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # intra: 1d - 31d
     # daily: 1w - 26w
     # weekly: 1m - 24m, or up to ~27 years (maxes out at 240000hrs)
+    # total: 
 
     return [intra, daily, weekly, total]
 
