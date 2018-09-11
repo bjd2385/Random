@@ -56,7 +56,6 @@ TRANSFERS_DONE    = '.transfers'        # `transfer`
 # Other configs
 SPEED_LIMIT = '/datto/config/local/speedLimit' # Upload speed limit
 
-
 NOW = datetime.datetime.now()
 
 
