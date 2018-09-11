@@ -34,6 +34,7 @@ newlines = re.compile(r'\n+')
 epoch    = re.compile(r'(?<=@)[0-9]+')
 schedule = re.compile(r'\"0\";i:[0-9]{1,3};') # pluck out hours of backups
 transfer = re.compile(r'[0-9]+(?=:)')
+pauses   = re.compile(r'')
 
 # Shell
 ZFS_agent_list = 'zfs list -H -o name'
