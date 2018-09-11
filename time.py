@@ -264,7 +264,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # 168:504:1248:744
     #
     # The first number is the number of hours to save intra-daily backups.
-    # The second number indicates the number of hours to save 
+    # The second number indicates the number of hours to save daily backups.
+    # The third number indicates the number of hours to save 
 
 
 
