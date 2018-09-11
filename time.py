@@ -12,7 +12,7 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 """
 
 # TODO: Take modifications of retention and backups into account
-# TODO: Implement exponential moving average 
+# TODO: Implement exponentially-weighted moving average
 
 import sys
 
