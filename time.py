@@ -262,6 +262,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # is dependent upon the last number in the 4-tuple.
     intra, daily, weekly, total = policy
 
+    # intra: 
+
     return [intra, daily, weekly, total]
 
 
