@@ -259,7 +259,12 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
          policy = cryptic_policy.readline().split(':')
 
     # Now let's decode what's _really_ going to happen to this data
-    # It's formatted in the file as 
+    # It's formatted in the file as a list of 4 numbers separated by colons, e.g.
+    #
+    # 168:504:1248:744
+    #
+    # The first number is the number of hours to save intra-daily backups.
+    # The second number indicates the 
 
 
 
