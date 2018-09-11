@@ -259,7 +259,7 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
          policy = cryptic_policy.readline().split(':')
 
     # Now let's decode what's _really_ going to happen to this data
-    intra, daily, total, local = list(map(lambda hrs: int(hrs) // 24, policy))
+    # It's formatted in the file as 
 
 
 
