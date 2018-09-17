@@ -42,7 +42,7 @@ def decodeJSON(key: str) -> Dict:
         raise FileNotFoundError('File {} does not exist'.format(key))
 
     with open(key, 'r') as keykeyData:
-        keyData = keykeyData.readline()
+        keyData = keykeyData.readline().rstrip()
 
 
     def nestLevel(currentList: Optional[List] =None) -> List:
@@ -125,7 +125,7 @@ def find(key: Any, nestedDicts: Dict) -> Any:
     return traverse(nestedDicts)
 
 
-def findAll(key: Any, nestedDicts: Dict) -> List:
+def findAll(key: Any, nestedDicts: Dict, byValue: bool =False) -> List:
     """
     Return all occurrences of values associated with `key`, if any. Again, O(n).
     """
@@ -134,8 +134,12 @@ def findAll(key: Any, nestedDicts: Dict) -> List:
     def traverse(nested: Dict) -> None:
         nonlocal key, occurrences
         for ky, value in list(nested.items()):
-            if ky == key:
-                occurrences.append(value)
+            if byValue:
+                if value == key:
+                    occurrences.append(ky)
+            else:
+                if ky == key:
+                    occurrences.append(value)
             if type(value) is dict:
                 traverse(value)
 
@@ -147,3 +151,4 @@ if __name__ == '__main__':
     print(decodeJSON('data.txt'))
     print(find('device', decodeJSON('data.txt')))
     print(findAll('device', decodeJSON('data.txt')))
+    print(findAll(1, decodeJSON('data.txt'), byValue=True))

@@ -16,9 +16,13 @@ current settings/bandwidth, to catch up, so that they can make that decision.
 
 import sys
 
-version = sys.version_info.major
-if version < 3:
-    raise Exception('Must use Python 3, you\'re using Python {}'.format(version))
+major = sys.version_info.major
+minor = sys.version_info.minor
+if major < 3:
+    raise Exception('Must use Python 3, you\'re using Python {}'.format(major))
+elif minor < 5:
+    raise Exception('Must use Python 3.5+, you\'re using Python 3.{}'\
+            .format(minor))
 
 from typing import List, Dict, Optional, Any
 from subprocess import PIPE, Popen
@@ -148,7 +152,7 @@ class ConvertJSON:
             raise FileNotFoundError('File {} does not exist'.format(key))
 
         with open(key, 'r') as keykeyData:
-            keyData = keykeyData.readline()
+            keyData = keykeyData.readline().rstrip()
 
         def nestLevel(currentList: Optional[List] = None) -> List:
             """
@@ -311,7 +315,7 @@ def main(arguments: argparse.Namespace) -> None:
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
 
-    #
+    # 
 
 
 if __name__ == '__main__':
