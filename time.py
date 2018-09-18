@@ -326,7 +326,7 @@ def main(arguments: argparse.Namespace) -> None:
         with open(intervalPath, 'r') as intervalFile:
             intervals.append(intervalFile.readline().rstrip())
 
-    
+    print(intervals)
 
 
 if __name__ == '__main__':
