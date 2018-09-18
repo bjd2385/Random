@@ -317,7 +317,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Map these schedules to a function that'll find all the hours we're
     # taking backups. This is the same as
-    backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
+    backupHours = list(map(partial(JSONdecoder.findAll, key='0', byValue=True),
                            schedules))
 
     print(backupHours)
