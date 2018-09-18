@@ -328,7 +328,8 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Determine if any agents have offsite paused (or even if offsite is
     # paused in general).
-    
+    for agent in agent_identifiers:
+        
 
     # Now we've collected the following information:
     #   . Interval of backups
