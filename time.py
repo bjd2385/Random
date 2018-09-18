@@ -29,11 +29,12 @@ from typing import List, Dict, Optional, Any
 from subprocess import PIPE, Popen
 from functools import partial
 from os.path import basename
+from glob import glob
 
 import warnings
 import argparse
-import datetime
 import os
+import datetime
 import re
 
 # Regexes
@@ -337,7 +338,7 @@ def main(arguments: argparse.Namespace) -> None:
     # Determine if any agents have offsite paused (or even if offsite is
     # paused in general).
     for agent in agent_identifiers:
-        with open(SPEEDSYNC_OPTIONS.format(agent), 'r') as options:
+        with open(glob(SPEEDSYNC_OPTIONS.format(agent)), 'r') as options:
             # Valid Python dictionary format (immutable : value)
             options = dict(options.readline().rstrip())
             for key, value in options.items():
