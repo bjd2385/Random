@@ -348,7 +348,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # global
     with open(SPEEDSYNC_OPTIONS, 'r') as global_options:
-        options = json.loads(global_options)
+        options = json.loads(global_options.readline().rstrip())
         if options['pauseZfs'] or options['pauseTransfer']:
             raise PausedTransfers()
 
@@ -371,7 +371,7 @@ def main(arguments: argparse.Namespace) -> None:
     #       . not paused,
     #       . exist,
     #       . and have snapshots.
-    #   . 
+    #   .
 
 
 if __name__ == '__main__':
