@@ -315,7 +315,7 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Map these schedules to a function that'll find all the hours we're
     # taking backups. This is the same as
-    # `cat /datto/config/keys/*.schedule | grep -oP "[0-9]+(?=;s:1:\"0\")`
+    # cat /datto/config/keys/*.schedule | grep -oP "[0-9]+(?=;s:1:\"0\")"
     backupHours = list(map(partial(JSONdecoder.findAll, key='0', byValue=True),
                            schedules))
 
