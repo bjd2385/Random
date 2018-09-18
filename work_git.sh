@@ -5,6 +5,6 @@
 #
 # Distributed under terms of the MIT license.
 
-git --git-dir=/home/brandon/datto/error_codes/.git/ --work-tree=/home/brandon/datto/error_codes/ add $@
-git --git-dir=/home/brandon/datto/error_codes/.git/ --work-tree=/home/brandon/datto/error_codes/ commit -m $@
-git --git-dir=/home/brandon/datto/error_codes/.git/ --work-tree=/home/brandon/datto/error_codes/ push
+git --git-dir=/home/brandon/datto/Random/.git/ --work-tree=/home/brandon/datto/Random/ add $@
+git --git-dir=/home/brandon/datto/Random/.git/ --work-tree=/home/brandon/datto/Random/ commit -m $@
+git --git-dir=/home/brandon/datto/Random/.git/ --work-tree=/home/brandon/datto/Random/ push
