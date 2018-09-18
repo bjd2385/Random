@@ -338,7 +338,7 @@ def main(arguments: argparse.Namespace) -> None:
     # Determine if any agents have offsite paused (or even if offsite is
     # paused in general).
     for agent in agent_identifiers:
-        with open(glob(SPEEDSYNC_OPTIONS.format(agent)), 'r') as options:
+        with open(*glob(SPEEDSYNC_OPTIONS.format(agent)), 'r') as options:
             # Valid Python dictionary format (immutable : value)
             options = dict(options.readline().rstrip())
             for key, value in options.items():
