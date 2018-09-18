@@ -229,6 +229,8 @@ class ConvertJSON:
         """
         Return the first occurrence of value associated with `key`. O(n) for `n`
         items in the flattened data.
+
+        (Iterable b => b -> a) so we can map over partial applications.
         """
 
         def traverse(nested: Dict) -> Any:
