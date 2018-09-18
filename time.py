@@ -53,7 +53,8 @@ SS_Options = 'speedsync options'
 
 # Key path and extensions
 KEYS = '/datto/config/keys/'
-SPEEDSYNC_OPTIONS = '/datto/config/sync/*+{}+agent/options'
+SPEEDSYNC_OPTIONS_AGENT = '/datto/config/sync/*+{}+agent/options' # glob
+SPEEDSYNC_OPTIONS = '/datto/config/sync/options'
 
 # local
 LOCAL_RETENTION   = '.retention'        # split(':')
@@ -344,7 +345,8 @@ def main(arguments: argparse.Namespace) -> None:
 
     # agent-level
     for agent in agent_identifiers:
-        with open(glob(SPEEDSYNC_OPTIONS.format(agent))[0], 'r') as options:
+        with open(glob(SPEEDSYNC_OPTIONS_AGENT.format(agent))[0], 'r') as \
+                options:
             # Valid Python dictionary format (immutable : value)
             options = json.loads(options.readline().rstrip())
             for key, value in options.items():
