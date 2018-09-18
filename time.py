@@ -364,7 +364,6 @@ def main(arguments: argparse.Namespace) -> None:
                 agent_identifiers.remove(agent)
 
 
-
     # Now we've collected the following information:
     #   . Interval of backups
     #   . Local and offsite backup schedules (list of each hour)
@@ -372,6 +371,7 @@ def main(arguments: argparse.Namespace) -> None:
     #       . not paused,
     #       . exist,
     #       . have snapshots,
+    #       . 
 
 
 if __name__ == '__main__':
