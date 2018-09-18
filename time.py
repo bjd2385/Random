@@ -165,7 +165,7 @@ class ConvertJSON:
                 currentList = []
 
             while keyData:
-                # Bite a piece at a time. Can't wait till assignment expressions!
+                # Can't wait till assignment expressions!
                 result = re.search(self.lexer, keyData)
 
                 if not result:
@@ -263,8 +263,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     Read the retention policy for an agent from file.
     """
     # There's offsite and local retention policies on our appliances.
-    with open(KEYS + agent + (OFFSITE_RETENTION if offsite else LOCAL_RETENTION))\
-            as cryptic_policy:
+    with open(KEYS + agent + (OFFSITE_RETENTION if offsite
+                              else LOCAL_RETENTION)) as cryptic_policy:
          policy = cryptic_policy.readline().split(':')
 
     # Now let's decode what's _really_ going to happen to this data. Everything
@@ -326,7 +326,11 @@ def main(arguments: argparse.Namespace) -> None:
         with open(intervalPath, 'r') as intervalFile:
             intervals.append(int(intervalFile.readline().rstrip()))
 
-
+    # Now we've collected the following information:
+    #   . Interval of backups
+    #   . Local and offsite backup schedules (list of each hour)
+    #   . A list of agents to work with
+    #   . 
 
 
 if __name__ == '__main__':
