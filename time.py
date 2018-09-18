@@ -341,7 +341,12 @@ def main(arguments: argparse.Namespace) -> None:
     # paused in general).
 
     # global
-    with open()
+    with open(SPEEDSYNC_OPTIONS, 'r') as global_options:
+        options = json.loads(global_options)
+        for key, value in options.items():
+            if (key == 'pauseZfs' and value == 1) or \
+               (key == 'pauseTransfer' and value == 1):
+                raise
 
     # agent-level
     for agent in agent_identifiers:
@@ -349,12 +354,10 @@ def main(arguments: argparse.Namespace) -> None:
                 options:
             # Valid Python dictionary format (immutable : value)
             options = json.loads(options.readline().rstrip())
-            for key, value in options.items():
-                if (key == 'pauseZfs'      and value == 1) or \
-                   (key == 'pauseTransfer' and value == 1):
-                    warnings.warn(agent + ' is paused, excluding',
-                                 stacklevel=2, category=RuntimeWarning)
-                    agent_identifiers.remove(agent)
+            if options['pauseZfs'] == 1 or options['pauseTransfer'] == 1):
+                warnings.warn(agent + ' is paused, excluding',
+                             stacklevel=2, category=RuntimeWarning)
+                agent_identifiers.remove(agent)
 
 
 
