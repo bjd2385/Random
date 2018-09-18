@@ -340,7 +340,7 @@ def main(arguments: argparse.Namespace) -> None:
     for agent in agent_identifiers:
         with open(glob(SPEEDSYNC_OPTIONS.format(agent))[0], 'r') as options:
             # Valid Python dictionary format (immutable : value)
-            print(options)
+            print(options.readline().rstrip())
             options = dict(options.readline().rstrip())
             for key, value in options.items():
                 if (key == 'pauseZfs'      and value == 1) or \
