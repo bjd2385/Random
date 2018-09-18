@@ -304,10 +304,12 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Grab data about snapshots and retention policies
     snaps = list(map(getSnapshots, arguments.agents))
-    for snap in snaps:
+
+    for agent, snap in zip(agents, snaps):
         if not len(snap):
-            warnings.warn(uuid + ' has no snapshots, excluding',
+            warnings.warn(agent + ' has no snapshots, excluding',
                           stacklevel=2, category=RuntimeWarning)
+
     local_ret_policies = list(map(decodeRetention, agent_identifiers))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
