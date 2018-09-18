@@ -32,6 +32,7 @@ from os.path import basename
 from glob import glob
 
 import warnings
+import json
 import argparse
 import os
 import datetime
@@ -340,8 +341,7 @@ def main(arguments: argparse.Namespace) -> None:
     for agent in agent_identifiers:
         with open(glob(SPEEDSYNC_OPTIONS.format(agent))[0], 'r') as options:
             # Valid Python dictionary format (immutable : value)
-            print(options.readline().rstrip())
-            options = dict(options.readline().rstrip())
+            options = json.loads(options.readline().rstrip())
             for key, value in options.items():
                 if (key == 'pauseZfs'      and value == 1) or \
                    (key == 'pauseTransfer' and value == 1):
