@@ -51,6 +51,7 @@ SS_Options = 'speedsync options'
 
 # Key path and extensions
 KEYS = '/datto/config/keys/'
+SPEEDSYNC_OPTIONS = '/datto/config/sync/*+{}+agent/options'
 
 # local
 LOCAL_RETENTION   = '.retention'        # split(':')
@@ -329,7 +330,15 @@ def main(arguments: argparse.Namespace) -> None:
     # Determine if any agents have offsite paused (or even if offsite is
     # paused in general).
     for agent in agent_identifiers:
-        
+        with open(SPEEDSYNC_OPTIONS.format(agent), 'r') as options:
+            # Valid Python dictionary format (immutable : value)
+            options = dict(options.readline().rstrip())
+            for key, value in options.items():
+                if (key == 'pauseZfs' and value == 1) or
+                   (key == 'pauseTransfer' and value == 1):
+                   warnings.warn(agent + ' is paused, excluding',
+                                 stacklevel=2, category=RuntimeWarning)
+
 
     # Now we've collected the following information:
     #   . Interval of backups
