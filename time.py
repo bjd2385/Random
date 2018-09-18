@@ -304,6 +304,10 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Grab data about snapshots and retention policies
     snaps = list(map(getSnapshots, arguments.agents))
+    for snap in snaps:
+        if not len(snap):
+            warnings.warn(uuid + ' has no snapshots, excluding',
+                          stacklevel=2, category=RuntimeWarning)
     local_ret_policies = list(map(decodeRetention, agent_identifiers))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
                                              agent_identifiers))
@@ -334,7 +338,7 @@ def main(arguments: argparse.Namespace) -> None:
             # Valid Python dictionary format (immutable : value)
             options = dict(options.readline().rstrip())
             for key, value in options.items():
-                if (key == 'pauseZfs' and value == 1) or \
+                if (key == 'pauseZfs'      and value == 1) or \
                    (key == 'pauseTransfer' and value == 1):
                    warnings.warn(agent + ' is paused, excluding',
                                  stacklevel=2, category=RuntimeWarning)
@@ -343,8 +347,10 @@ def main(arguments: argparse.Namespace) -> None:
     # Now we've collected the following information:
     #   . Interval of backups
     #   . Local and offsite backup schedules (list of each hour)
-    #   . A list of agents to work with
-    #   .
+    #   . A list of agents to work with that are
+    #       . not paused,
+    #       . exist,
+    #       . have snapshots,
 
 
 if __name__ == '__main__':
