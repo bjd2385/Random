@@ -365,8 +365,8 @@ def main(arguments: argparse.Namespace) -> None:
                              stacklevel=2, category=RuntimeWarning)
                 agent_identifiers.remove(agent)
 
-    # Acquire the bandwidth
-
+    # Acquire the bandwidth and throttling schedule
+    
 
     # Now we've collected the following information:
     #   . Interval of backups
