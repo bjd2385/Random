@@ -283,6 +283,12 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     return [intra, daily, weekly, total]
 
 
+class PausedTransfers(Exception):
+    """
+    Raised when Speedsync options are paused.
+    """
+
+
 def main(arguments: argparse.Namespace) -> None:
     # Get a list of ZFS datasets/agents. Basically the same as
     # zfs list | awk '/(agents\/)/'
@@ -343,10 +349,8 @@ def main(arguments: argparse.Namespace) -> None:
     # global
     with open(SPEEDSYNC_OPTIONS, 'r') as global_options:
         options = json.loads(global_options)
-        for key, value in options.items():
-            if (key == 'pauseZfs' and value == 1) or \
-               (key == 'pauseTransfer' and value == 1):
-                raise
+        if options['pauseZfs'] or options['pauseTransfer']:
+            raise PausedTransfers()
 
     # agent-level
     for agent in agent_identifiers:
@@ -354,7 +358,7 @@ def main(arguments: argparse.Namespace) -> None:
                 options:
             # Valid Python dictionary format (immutable : value)
             options = json.loads(options.readline().rstrip())
-            if options['pauseZfs'] == 1 or options['pauseTransfer'] == 1):
+            if options['pauseZfs'] or options['pauseTransfer']:
                 warnings.warn(agent + ' is paused, excluding',
                              stacklevel=2, category=RuntimeWarning)
                 agent_identifiers.remove(agent)
