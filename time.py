@@ -334,7 +334,7 @@ def main(arguments: argparse.Namespace) -> None:
             # Valid Python dictionary format (immutable : value)
             options = dict(options.readline().rstrip())
             for key, value in options.items():
-                if (key == 'pauseZfs' and value == 1) or
+                if (key == 'pauseZfs' and value == 1) or \
                    (key == 'pauseTransfer' and value == 1):
                    warnings.warn(agent + ' is paused, excluding',
                                  stacklevel=2, category=RuntimeWarning)
