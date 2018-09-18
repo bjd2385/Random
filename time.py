@@ -127,6 +127,12 @@ class InvalidArrayFormat(SyntaxError):
     """
 
 
+class PausedTransfers(Exception):
+    """
+    Raised when Speedsync options are paused.
+    """
+
+
 class ConvertJSON:
     """
     Methods for working on our (*ahem* horrid) JSON.
@@ -281,12 +287,6 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # total: 1w - 7y, or up to ~27 years, again
 
     return [intra, daily, weekly, total]
-
-
-class PausedTransfers(Exception):
-    """
-    Raised when Speedsync options are paused.
-    """
 
 
 def main(arguments: argparse.Namespace) -> None:
