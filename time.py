@@ -237,6 +237,7 @@ class ConvertJSON:
         """
         Return all occurrences of values associated with `key`, if any. Again,
         O(n). If `byValue`, searches by value and returns the associated keys.
+        (Essentially a reverse lookup.)
         """
         occurrences = []
 
