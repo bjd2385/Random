@@ -370,8 +370,8 @@ def main(arguments: argparse.Namespace) -> None:
     #   . A list of agents to work with that are
     #       . not paused,
     #       . exist,
-    #       . have snapshots,
-    #       . 
+    #       . and have snapshots.
+    #   . 
 
 
 if __name__ == '__main__':
