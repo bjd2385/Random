@@ -326,11 +326,15 @@ def main(arguments: argparse.Namespace) -> None:
         with open(intervalPath, 'r') as intervalFile:
             intervals.append(int(intervalFile.readline().rstrip()))
 
+    # Determine if any agents have offsite paused (or even if offsite is
+    # paused in general).
+    
+
     # Now we've collected the following information:
     #   . Interval of backups
     #   . Local and offsite backup schedules (list of each hour)
     #   . A list of agents to work with
-    #   . 
+    #   .
 
 
 if __name__ == '__main__':
