@@ -365,6 +365,8 @@ def main(arguments: argparse.Namespace) -> None:
                              stacklevel=2, category=RuntimeWarning)
                 agent_identifiers.remove(agent)
 
+    # Acquire the bandwidth
+
 
     # Now we've collected the following information:
     #   . Interval of backups
@@ -373,7 +375,7 @@ def main(arguments: argparse.Namespace) -> None:
     #       . not paused,
     #       . exist,
     #       . and have snapshots.
-    #   .
+    #   . Current offsite bandwidth and throttling.
 
 
 if __name__ == '__main__':
