@@ -324,7 +324,7 @@ def main(arguments: argparse.Namespace) -> None:
     for agent in agent_identifiers:
         intervalPath = KEYS + agent + BACKUP_INTERVAL
         with open(intervalPath, 'r') as intervalFile:
-            intervals.append(intervalFile.readline().rstrip())
+            intervals.append(int(intervalFile.readline().rstrip()))
 
     print(intervals)
 
