@@ -313,7 +313,7 @@ def main(arguments: argparse.Namespace) -> None:
         schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
 
     # Map these schedules to a function that'll find all the hours we're
-    # taking backups. This is the same as 
+    # taking backups. This is the same as
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
 
