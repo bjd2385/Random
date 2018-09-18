@@ -21,6 +21,7 @@ minor = sys.version_info.minor
 if major < 3:
     raise Exception('Must use Python 3, you\'re using Python {}'.format(major))
 elif minor < 5:
+    # Function type annotations
     raise Exception('Must use Python 3.5+, you\'re using Python 3.{}'\
             .format(minor))
 
@@ -214,7 +215,7 @@ class ConvertJSON:
         return convert(nestLevel()[0])
 
     @staticmethod
-    def find(key: Any, nestedDicts: Dict) -> Any:
+    def find(nestedDicts: Dict, key: Any) -> Any:
         """
         Return the first occurrence of value associated with `key`. O(n) for `n`
         items in the flattened data.
@@ -233,7 +234,7 @@ class ConvertJSON:
         return traverse(nestedDicts)
 
     @staticmethod
-    def findAll(key: Any, nestedDicts: Dict, byValue: bool = False) -> List:
+    def findAll(nestedDicts: Dict, key: Any, byValue: bool = False) -> List:
         """
         Return all occurrences of values associated with `key`, if any. Again,
         O(n). If `byValue`, searches by value and returns the associated keys.
