@@ -318,7 +318,15 @@ def main(arguments: argparse.Namespace) -> None:
     # `cat /datto/config/keys/*.schedule | grep -oP "[0-9]+(?=;s:1:\"0\")`
     backupHours = list(map(partial(JSONdecoder.findAll, key='0', byValue=True),
                            schedules))
-    intervals = [min for min in KEYS + agent_identifiers + ]
+
+    # Collect interval of backups
+    intervals = []
+    for agent in agent_identifiers:
+        intervalPath = KEYS + agent + BACKUP_INTERVAL
+        with open(intervalPath, 'r') as intervalFile:
+            intervals.append(intervalFile.readline().rstrip())
+
+    
 
 
 if __name__ == '__main__':
