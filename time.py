@@ -155,7 +155,7 @@ class ConvertJSON:
         with open(key, 'r') as keykeyData:
             keyData = keykeyData.readline().rstrip()
 
-        def nestLevel(currentList: Optional[List] = None) -> List:
+        def nestLevel(currentList: Optional[List] =None) -> List:
             """
             Allow the traversal of all nested levels.
             """
@@ -319,14 +319,14 @@ def main(arguments: argparse.Namespace) -> None:
     backupHours = list(map(partial(JSONdecoder.findAll, key='0', byValue=True),
                            schedules))
 
-    # Collect interval of backups
+    # Collect interval of backups.
     intervals = []
     for agent in agent_identifiers:
         intervalPath = KEYS + agent + BACKUP_INTERVAL
         with open(intervalPath, 'r') as intervalFile:
             intervals.append(int(intervalFile.readline().rstrip()))
 
-    
+
 
 
 if __name__ == '__main__':
