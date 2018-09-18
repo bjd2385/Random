@@ -317,7 +317,7 @@ def main(arguments: argparse.Namespace) -> None:
     backupHours = list(map(partial(JSONdecoder.findAll, key=0, byValue=True),
                            schedules))
 
-    # 
+    print(backupHours)
 
 
 if __name__ == '__main__':
