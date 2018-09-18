@@ -349,6 +349,7 @@ def main(arguments: argparse.Namespace) -> None:
                                  stacklevel=2, category=RuntimeWarning)
                     agent_identifiers.remove(agent)
 
+    
 
     # Now we've collected the following information:
     #   . Interval of backups
