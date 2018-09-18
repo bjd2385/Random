@@ -330,7 +330,7 @@ def main(arguments: argparse.Namespace) -> None:
     #   . Interval of backups
     #   . Local and offsite backup schedules (list of each hour)
     #   . A list of agents to work with
-    #   . 
+    #   .
 
 
 if __name__ == '__main__':
