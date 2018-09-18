@@ -318,8 +318,7 @@ def main(arguments: argparse.Namespace) -> None:
     # `cat /datto/config/keys/*.schedule | grep -oP "[0-9]+(?=;s:1:\"0\")`
     backupHours = list(map(partial(JSONdecoder.findAll, key='0', byValue=True),
                            schedules))
-
-    print(backupHours)
+    interval = 
 
 
 if __name__ == '__main__':
