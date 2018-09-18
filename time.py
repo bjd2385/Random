@@ -309,6 +309,7 @@ def main(arguments: argparse.Namespace) -> None:
         if not len(snap):
             warnings.warn(agent + ' has no snapshots, excluding',
                           stacklevel=2, category=RuntimeWarning)
+            agent_identifiers.remove(agent)
 
     local_ret_policies = list(map(decodeRetention, agent_identifiers))
     offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
@@ -344,6 +345,7 @@ def main(arguments: argparse.Namespace) -> None:
                    (key == 'pauseTransfer' and value == 1):
                    warnings.warn(agent + ' is paused, excluding',
                                  stacklevel=2, category=RuntimeWarning)
+                    agent_identifiers.remove(agent)
 
 
     # Now we've collected the following information:
