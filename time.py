@@ -371,7 +371,7 @@ def main(arguments: argparse.Namespace) -> None:
     #       . not paused,
     #       . exist,
     #       . and have snapshots.
-    #   . 
+    #   .
 
 
 if __name__ == '__main__':
