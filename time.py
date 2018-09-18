@@ -338,6 +338,11 @@ def main(arguments: argparse.Namespace) -> None:
 
     # Determine if any agents have offsite paused (or even if offsite is
     # paused in general).
+
+    # global
+    with open()
+
+    # agent-level
     for agent in agent_identifiers:
         with open(glob(SPEEDSYNC_OPTIONS.format(agent))[0], 'r') as options:
             # Valid Python dictionary format (immutable : value)
@@ -349,7 +354,7 @@ def main(arguments: argparse.Namespace) -> None:
                                  stacklevel=2, category=RuntimeWarning)
                     agent_identifiers.remove(agent)
 
-    
+
 
     # Now we've collected the following information:
     #   . Interval of backups
