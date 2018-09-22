@@ -47,7 +47,7 @@ transfer = re.compile(r'[0-9]+(?=:)')
 pauses   = re.compile(r'pause')
 
 # Shell
-ZFS_agent_list = 'zfs list -H -o name'
+ZFS_agent_list = 'zfs list -H -o name | awk \'/(agents\/)/\''
 ZFS_list_snapshots = 'zfs list -t snapshot -Hrp -o name,written,compressratio'
 SS_Options = 'speedsync options'
 
@@ -296,10 +296,24 @@ class Timeline:
     Primary class for acquiring data and managing the loop.
     """
     def __init__(self, arguments: argparse.Namespace) -> None:
-        # Get a list of ZFS datasets/agents. Basically the same as
-        # zfs list | awk '/(agents\/)/'
-        self.datasets = list(getIO(ZFS_agent_list))
-        self.agents = list(filter(lambda path: 'agents/' in path, self.datasets))
+        # Get a master list of ZFS datasets/agents.
+        self.agents = list(getIO(ZFS_agent_list))
+
+        # Check the requested agents against absolute list of agents
+        if arguments.agents:
+            arguments.agents = flatten(arguments.agents)
+            for uuid in arguments.agents:
+                if uuid not in self.agents:
+                    warnings.warn(uuid + ' is not in the dataset, excluding',
+                                  stacklevel=2, category=RuntimeWarning)
+                    arguments.agents.remove(uuid)
+            if not arguments.agents:
+                warnings.warn('Defaulting to complete dataset')
+                arguments.agents = self.agents
+        else:
+            arguments.agents = self.agents
+
+        agent_identifiers = list(map(basename, arguments.agents))
 
 
 def main(arguments: argparse.Namespace) -> None:
