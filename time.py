@@ -271,27 +271,6 @@ class ConvertJSON:
         return occurrences
 
 
-def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
-    """
-    Read the retention policy for an agent from file.
-    """
-    # There's offsite and local retention policies on our appliances.
-    with open(KEYS + agent + (OFFSITE_RETENTION if offsite
-                              else LOCAL_RETENTION)) as cryptic_policy:
-         policy = cryptic_policy.readline().split(':')
-
-    # Now let's decode what's _really_ going to happen to this data.
-    # everything is dependent upon the last number in the 4-tuple.
-    intra, daily, weekly, total = policy
-
-    # intra: 1d - 31d
-    # daily: 1w - 26w
-    # weekly: 1m - 24m, or up to ~27 years (maxes out at 240000hrs)
-    # total: 1w - 7y, or up to ~27 years, again
-
-    return [intra, daily, weekly, total]
-
-
 class Timeline:
     """
     Primary class for acquiring data and managing the loop.
@@ -323,9 +302,12 @@ class Timeline:
         self._checkSnaps()
 
         # Grab retention policies.
-        local_ret_policies = list(map(decodeRetention, self.agent_identifiers))
+        local_ret_policies = list(map(
+            self.decodeRetention,
+            self.agent_identifiers
+        ))
         offsite_ret_policies = list(map(
-            partial(decodeRetention, offsite=True),
+            partial(self.decodeRetention, offsite=True),
             self.agent_identifiers
         ))
 
@@ -422,9 +404,31 @@ class Timeline:
                 if options['pauseZfs'] or options['pauseTransfer']:
                     _WARN(agent + ' is paused, excluding')
                     self.agent_identifiers.remove(agent)
+
         # If global check has not been run, we'll check just in case
         if not self.agent_identifiers:
             raise PausedTransfers('Agents are all individually paused')
+
+    @staticmethod
+    def decodeRetention(agent: str, offsite: bool = False) -> List[int]:
+        """
+        Read the retention policy for an agent from file.
+        """
+        # There's offsite and local retention policies on our appliances.
+        with open(KEYS + agent + (OFFSITE_RETENTION if offsite
+        else LOCAL_RETENTION)) as cryptic_policy:
+            policy = cryptic_policy.readline().split(':')
+
+        # Now let's decode what's _really_ going to happen to this data.
+        # everything is dependent upon the last number in the 4-tuple.
+        intra, daily, weekly, total = policy
+
+        # intra: 1d - 31d
+        # daily: 1w - 26w
+        # weekly: 1m - 24m, or up to ~27 years (maxes out at 240000hrs)
+        # total: 1w - 7y, or up to ~27 years, again
+
+        return [intra, daily, weekly, total]
 
 
 if __name__ == '__main__':
