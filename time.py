@@ -432,7 +432,7 @@ class Timeline:
             snapshots[i] = [epochInt, int(epochSize * compressRatio)]
 
         return dict(snapshots)
-    
+
 
 def main(args: argparse.Namespace) -> None:
     time = Timeline(args)
