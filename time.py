@@ -343,9 +343,9 @@ class Timeline:
         # Collect intervals of backups.
         self.intervals = self._acquireIntervals()
 
+        # Ensure offsite sync isn't paused locally.
         self.checkGlobalOptions()
-        self.checkAllOptions()
-
+        self.checkAllAgentOptions()
 
         # Acquire the bandwidth and throttling schedule
 
@@ -410,7 +410,7 @@ class Timeline:
             options = json.loads(options.readline().rstrip())
             return options['pauseZfs'] or options['pauseTransfer']
 
-    def checkAllOptions(self) -> None:
+    def checkAllAgentOptions(self) -> None:
         """
         Check all agents' sync options.
         """
