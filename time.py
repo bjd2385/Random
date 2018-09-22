@@ -315,7 +315,70 @@ class Timeline:
 
         self.agent_identifiers = list(map(basename, arguments.agents))
 
+        # Grab data about snapshots and retention policies
+        snaps = list(map(getSnapshots, arguments.agents))
 
+        for agent, snap in zip(self.agents, snaps):
+            if not len(snap):
+                warnings.warn(agent + ' has no snapshots, excluding',
+                              stacklevel=2, category=RuntimeWarning)
+                self.agent_identifiers.remove(agent)
+
+        local_ret_policies = list(map(decodeRetention, self.agent_identifiers))
+        offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
+                                        self.agent_identifiers))
+
+        # Decode schedules and store them in a list.
+        JSONdecoder = ConvertJSON()
+        schedules = []
+        for agent in self.agent_identifiers:
+            schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
+
+        # Map these schedules to a function that'll find all the hours we're
+        # taking backups. This is the same as
+        # cat /datto/config/keys/*.schedule | grep -oP "[0-9]+(?=;s:1:\"0\")"
+        backupHours = list(map(
+            partial(JSONdecoder.findAll, key='0', byValue=True),
+            schedules
+        ))
+
+        # Collect interval of backups.
+        intervals = []
+        for agent in self.agent_identifiers:
+            intervalPath = KEYS + agent + BACKUP_INTERVAL
+            with open(intervalPath, 'r') as intervalFile:
+                intervals.append(int(intervalFile.readline().rstrip()))
+
+        # Determine if any agents have offsite paused (or even if offsite is
+        # paused in general).
+
+        # global
+        with open(SPEEDSYNC_OPTIONS, 'r') as global_options:
+            options = json.loads(global_options.readline().rstrip())
+            if options['pauseZfs'] or options['pauseTransfer']:
+                raise PausedTransfers()
+
+        # agent-level
+        for agent in self.agent_identifiers:
+            with open(glob(SPEEDSYNC_OPTIONS_AGENT.format(agent))[0], 'r') as \
+                    options:
+                # Valid Python dictionary format (immutable : value)
+                options = json.loads(options.readline().rstrip())
+                if options['pauseZfs'] or options['pauseTransfer']:
+                    warnings.warn(agent + ' is paused, excluding',
+                                  stacklevel=2, category=RuntimeWarning)
+                    self.agent_identifiers.remove(agent)
+
+        # Acquire the bandwidth and throttling schedule
+
+        # Now we've collected the following information:
+        #   . Interval of backups
+        #   . Local and offsite backup schedules (list of each hour)
+        #   . A list of agents to work with that are
+        #       . not paused,
+        #       . exist,
+        #       . and have snapshots.
+        #   . Current offsite bandwidth and throttling.
 
 
 def main(arguments: argparse.Namespace) -> None:
