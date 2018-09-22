@@ -295,6 +295,8 @@ class Timeline:
     """
     Primary class for acquiring data and managing the loop.
     """
+    JSONdecoder = ConvertJSON()
+
     def __init__(self, arguments: argparse.Namespace) -> None:
         # Get a master list of ZFS datasets/agents.
         self.agents = list(getIO(ZFS_agent_list))
@@ -316,23 +318,32 @@ class Timeline:
         self.agent_identifiers = list(map(basename, arguments.agents))
 
         # Grab data about snapshots and retention policies
-        snaps = list(map(getSnapshots, arguments.agents))
+        self.snaps = list(map(getSnapshots, arguments.agents))
+        self._checkSnaps()
 
-        for agent, snap in zip(self.agents, snaps):
+        # Grab retention policies
+        local_ret_policies = list(map(decodeRetention, self.agent_identifiers))
+        offsite_ret_policies = list(map(
+            partial(decodeRetention, offsite=True),
+            self.agent_identifiers
+        ))
+
+    def _checkSnaps(self) -> None:
+        """
+        Exclude agents that don't have snapshots.
+        """
+        for agent, snap in zip(self.agents, self.snaps):
             if not len(snap):
                 warnings.warn(agent + ' has no snapshots, excluding',
                               stacklevel=2, category=RuntimeWarning)
                 self.agent_identifiers.remove(agent)
 
-        local_ret_policies = list(map(decodeRetention, self.agent_identifiers))
-        offsite_ret_policies = list(map(partial(decodeRetention, offsite=True),
-                                        self.agent_identifiers))
-
         # Decode schedules and store them in a list.
-        JSONdecoder = ConvertJSON()
         schedules = []
         for agent in self.agent_identifiers:
-            schedules.append(JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE))
+            schedules.append(
+                self.JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE)
+            )
 
         # Map these schedules to a function that'll find all the hours we're
         # taking backups. This is the same as
