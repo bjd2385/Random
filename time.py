@@ -246,7 +246,7 @@ class ConvertJSON:
         return traverse(nestedDicts)
 
     @staticmethod
-    def findAll(nestedDicts: Dict, key: Any, byValue: bool = False) -> List:
+    def findAll(nestedDicts: Dict, key: Any, byValue: bool =False) -> List:
         """
         Return all occurrences of values associated with `key`, if any. Again,
         O(n). If `byValue`, searches by value and returns the associated keys.
@@ -289,6 +289,17 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
     # total: 1w - 7y, or up to ~27 years, again
 
     return [intra, daily, weekly, total]
+
+
+class Timeline:
+    """
+    Primary class for acquiring data and managing the loop.
+    """
+    def __init__(self, arguments: argparse.Namespace) -> None:
+        # Get a list of ZFS datasets/agents. Basically the same as
+        # zfs list | awk '/(agents\/)/'
+        self.datasets = list(getIO(ZFS_agent_list))
+        self.agents = list(filter(lambda path: 'agents/' in path, self.datasets))
 
 
 def main(arguments: argparse.Namespace) -> None:
@@ -366,7 +377,7 @@ def main(arguments: argparse.Namespace) -> None:
                 agent_identifiers.remove(agent)
 
     # Acquire the bandwidth and throttling schedule
-    
+
 
     # Now we've collected the following information:
     #   . Interval of backups
