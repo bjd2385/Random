@@ -5,6 +5,8 @@
 #
 # Distributed under terms of the MIT license.
 
-git --git-dir=/home/brandon/datto/Random/.git/ --work-tree=/home/brandon/datto/Random/ add $@
-git --git-dir=/home/brandon/datto/Random/.git/ --work-tree=/home/brandon/datto/Random/ commit -m $@
-git --git-dir=/home/brandon/datto/Random/.git/ --work-tree=/home/brandon/datto/Random/ push
+DIR="/mnt/o/Random"
+
+git --git-dir="$DIR/.git/" --work-tree="$DIR/" add $@
+git --git-dir="$DIR/.git/" --work-tree="$DIR/" commit -m $@
+git --git-dir="$DIR/.git/" --work-tree="$DIR/" push
