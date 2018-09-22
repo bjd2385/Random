@@ -313,7 +313,9 @@ class Timeline:
         else:
             arguments.agents = self.agents
 
-        agent_identifiers = list(map(basename, arguments.agents))
+        self.agent_identifiers = list(map(basename, arguments.agents))
+
+    
 
 
 def main(arguments: argparse.Namespace) -> None:
