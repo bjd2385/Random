@@ -74,46 +74,6 @@ NOW = datetime.datetime.now()
 _WARN = partial(warnings.warn, stacklevel=2, category=RuntimeWarning)
 
 
-def getIO(command: str) -> List[str]:
-    """
-    Get results from terminal commands as lists of lines of text.
-    """
-    with Popen(command, shell=True) as proc:
-        stdout, stderr = proc.communicate()
-    
-    if stderr:
-        raise ValueError('Command exited with errors: {}'.format(stderr))
-
-    # Further processing
-    if stdout:
-        stdout = re.split(newlines, stdout.decode())
-    
-    return stdout
-
-
-def flatten(inList: List[List]) -> List:
-    """
-    Similar to Haskell's `concat :: [[a]] -> [a]`.
-    """
-    flatList = []
-    for subList in inList:
-        for string in subList:
-            flatList.append(string)
-    return flatList
-
-
-class InvalidArrayFormat(SyntaxError):
-    """
-    Raised when the input "compressed" JSON format is invalid.
-    """
-
-
-class PausedTransfers(Exception):
-    """
-    Raised when Speedsync options are paused.
-    """
-
-
 class ConvertJSON:
     """
     Methods for working on our (*ahem* horrid) JSON.
@@ -326,8 +286,7 @@ class Timeline:
         """
         for agent, snap in zip(self.agents, self.snaps):
             if not len(snap):
-                warnings.warn(agent + ' has no snapshots, excluding',
-                              stacklevel=2, category=RuntimeWarning)
+                _WARN(agent + ' has no snapshots, excluding')
                 self.agent_identifiers.remove(agent)
 
     def _acquireSchedules(self) -> List[Dict[int, int]]:
@@ -432,6 +391,46 @@ class Timeline:
             snapshots[i] = [epochInt, int(epochSize * compressRatio)]
 
         return dict(snapshots)
+
+
+def getIO(command: str) -> List[str]:
+    """
+    Get results from terminal commands as lists of lines of text.
+    """
+    with Popen(command, shell=True) as proc:
+        stdout, stderr = proc.communicate()
+
+    if stderr:
+        raise ValueError('Command exited with errors: {}'.format(stderr))
+
+    # Further processing
+    if stdout:
+        stdout = re.split(newlines, stdout.decode())
+
+    return stdout
+
+
+def flatten(inList: List[List]) -> List:
+    """
+    Similar to Haskell's `concat :: [[a]] -> [a]`.
+    """
+    flatList = []
+    for subList in inList:
+        for string in subList:
+            flatList.append(string)
+    return flatList
+
+
+class InvalidArrayFormat(SyntaxError):
+    """
+    Raised when the input "compressed" JSON format is invalid.
+    """
+
+
+class PausedTransfers(Exception):
+    """
+    Raised when Speedsync options are paused.
+    """
 
 
 def main(args: argparse.Namespace) -> None:
