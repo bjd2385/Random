@@ -314,12 +314,12 @@ class Timeline:
                 arguments.agents = self.masterAgents
         else:
             arguments.agents = self.masterAgents
-        
+
         self.agents = arguments.agents
         self.agent_identifiers = list(map(basename, arguments.agents))
 
         # Grab data about snapshots and retention policies
-        self.snaps = list(map(getSnapshots, arguments.agents))
+        self.snaps = list(map(getSnapshots, self.agents))
         self._checkSnaps()
 
         # Grab retention policies
