@@ -422,6 +422,7 @@ class Timeline:
                 if options['pauseZfs'] or options['pauseTransfer']:
                     _WARN(agent + ' is paused, excluding')
                     self.agent_identifiers.remove(agent)
+        if self.agent_identifiers
 
 
 if __name__ == '__main__':
