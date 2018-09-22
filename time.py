@@ -21,7 +21,7 @@ minor = sys.version_info.minor
 if major < 3:
     raise Exception('Must use Python 3, you\'re using Python {}'.format(major))
 elif minor < 5:
-    # Function type annotations
+    # Just in case; function type annotations
     raise Exception('Must use Python 3.5+, you\'re using Python 3.{}'\
             .format(minor))
 
