@@ -280,8 +280,8 @@ def decodeRetention(agent: str, offsite: bool =False) -> List[int]:
                               else LOCAL_RETENTION)) as cryptic_policy:
          policy = cryptic_policy.readline().split(':')
 
-    # Now let's decode what's _really_ going to happen to this data. Everything
-    # is dependent upon the last number in the 4-tuple.
+    # Now let's decode what's _really_ going to happen to this data.
+    # everything is dependent upon the last number in the 4-tuple.
     intra, daily, weekly, total = policy
 
     # intra: 1d - 31d
@@ -422,7 +422,9 @@ class Timeline:
                 if options['pauseZfs'] or options['pauseTransfer']:
                     _WARN(agent + ' is paused, excluding')
                     self.agent_identifiers.remove(agent)
-        if self.agent_identifiers
+        # If global check has not been run, we'll check just in case
+        if not self.agent_identifiers:
+            raise PausedTransfers('Agents are all individually paused')
 
 
 if __name__ == '__main__':
