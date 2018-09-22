@@ -328,16 +328,6 @@ class Timeline:
             self.agent_identifiers
         ))
 
-    def _checkSnaps(self) -> None:
-        """
-        Exclude agents that don't have snapshots.
-        """
-        for agent, snap in zip(self.agents, self.snaps):
-            if not len(snap):
-                warnings.warn(agent + ' has no snapshots, excluding',
-                              stacklevel=2, category=RuntimeWarning)
-                self.agent_identifiers.remove(agent)
-
         # Decode schedules and store them in a list.
         schedules = []
         for agent in self.agent_identifiers:
@@ -390,6 +380,16 @@ class Timeline:
         #       . exist,
         #       . and have snapshots.
         #   . Current offsite bandwidth and throttling.
+
+    def _checkSnaps(self) -> None:
+        """
+        Exclude agents that don't have snapshots.
+        """
+        for agent, snap in zip(self.agents, self.snaps):
+            if not len(snap):
+                warnings.warn(agent + ' has no snapshots, excluding',
+                              stacklevel=2, category=RuntimeWarning)
+                self.agent_identifiers.remove(agent)
 
 
 if __name__ == '__main__':
