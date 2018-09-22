@@ -26,7 +26,7 @@ elif minor < 5:
             .format(minor))
 
 from typing import List, Dict, Optional, Any
-from subprocess import PIPE, Popen
+from subprocess import Popen
 from functools import partial
 from os.path import basename
 from glob import glob
@@ -103,8 +103,8 @@ class ConvertJSON:
         if not os.path.isfile(key):
             raise FileNotFoundError('File {} does not exist'.format(key))
 
-        with open(key, 'r') as keykeyData:
-            keyData = keykeyData.readline().rstrip()
+        with open(key, 'r') as keyData:
+            keyData = keyData.readline().rstrip()
 
         def nestLevel(currentList: Optional[List] =None) -> List:
             """
@@ -242,11 +242,11 @@ class Timeline:
         self._checkSnaps()
 
         # Grab retention policies.
-        local_ret_policies = list(map(
+        self.local_ret_policies = list(map(
             self.decodeRetention,
             self.agent_identifiers
         ))
-        offsite_ret_policies = list(map(
+        self.offsite_ret_policies = list(map(
             partial(self.decodeRetention, offsite=True),
             self.agent_identifiers
         ))
