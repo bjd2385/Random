@@ -77,7 +77,7 @@ def getIO(command: str) -> List[str]:
     """
     Get results from terminal commands as lists of lines of text.
     """
-    with Popen(re.split(spaces, command), shell=True) as proc:
+    with Popen(command, shell=True) as proc:
         stdout, stderr = proc.communicate()
     
     if stderr:
