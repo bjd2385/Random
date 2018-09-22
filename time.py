@@ -318,11 +318,11 @@ class Timeline:
         self.agents = arguments.agents
         self.agent_identifiers = list(map(basename, arguments.agents))
 
-        # Grab data about snapshots and retention policies
+        # Grab data about snapshots and retention policies.
         self.snaps = list(map(getSnapshots, self.agents))
         self._checkSnaps()
 
-        # Grab retention policies
+        # Grab retention policies.
         local_ret_policies = list(map(decodeRetention, self.agent_identifiers))
         offsite_ret_policies = list(map(
             partial(decodeRetention, offsite=True),
@@ -340,32 +340,12 @@ class Timeline:
             self.schedules
         ))
 
-        # Collect interval of backups.
-        intervals = []
-        for agent in self.agent_identifiers:
-            intervalPath = KEYS + agent + BACKUP_INTERVAL
-            with open(intervalPath, 'r') as intervalFile:
-                intervals.append(int(intervalFile.readline().rstrip()))
+        # Collect intervals of backups.
+        self.intervals = self._acquireIntervals()
 
-        # Determine if any agents have offsite paused (or even if offsite is
-        # paused in general).
+        self.checkGlobalOptions()
+        self.checkAllOptions()
 
-        # global
-        with open(SPEEDSYNC_OPTIONS, 'r') as global_options:
-            options = json.loads(global_options.readline().rstrip())
-            if options['pauseZfs'] or options['pauseTransfer']:
-                raise PausedTransfers()
-
-        # agent-level
-        for agent in self.agent_identifiers:
-            with open(glob(SPEEDSYNC_OPTIONS_AGENT.format(agent))[0], 'r') as \
-                    options:
-                # Valid Python dictionary format (immutable : value)
-                options = json.loads(options.readline().rstrip())
-                if options['pauseZfs'] or options['pauseTransfer']:
-                    warnings.warn(agent + ' is paused, excluding',
-                                  stacklevel=2, category=RuntimeWarning)
-                    self.agent_identifiers.remove(agent)
 
         # Acquire the bandwidth and throttling schedule
 
@@ -398,6 +378,50 @@ class Timeline:
                 self.JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE)
             )
         return schedules
+
+    def _acquireIntervals(self) -> List[int]:
+        """
+        Get a list of intervals over which backups are taken during hours
+        backups are acquired.
+        """
+        intervals = []
+        for agent in self.agent_identifiers:
+            intervalPath = KEYS + agent + BACKUP_INTERVAL
+            with open(intervalPath, 'r') as intervalFile:
+                intervals.append(int(intervalFile.readline().rstrip()))
+        return intervals
+
+    def checkGlobalOptions(self) -> None:
+        """
+        If `speedsync options` are paused, raise an exception.
+        """
+        with open(SPEEDSYNC_OPTIONS, 'r') as global_options:
+            options = json.loads(global_options.readline().rstrip())
+            if options['pauseZfs'] or options['pauseTransfer']:
+                raise PausedTransfers('Sync options are paused')
+
+    def checkAgentOptions(self, agentBasename: str) -> bool:
+        """
+        Check a single agent's sync options.
+        """
+        # Check a single agent
+        file = glob(SPEEDSYNC_OPTIONS_AGENT.format(agentBasename))[0]
+        with open(file, 'r') as options:
+            options = json.loads(options.readline().rstrip())
+            return options['pauseZfs'] or options['pauseTransfer']
+
+    def checkAllOptions(self) -> None:
+        """
+        Check all agents' sync options.
+        """
+        for agent in self.agent_identifiers:
+            file = glob(SPEEDSYNC_OPTIONS_AGENT.format(agent))[0]
+            with open(file, 'r') as options:
+                # Valid Python dictionary format (immutable : value)
+                options = json.loads(options.readline().rstrip())
+                if options['pauseZfs'] or options['pauseTransfer']:
+                    _WARN(agent + ' is paused, excluding')
+                    self.agent_identifiers.remove(agent)
 
 
 if __name__ == '__main__':
