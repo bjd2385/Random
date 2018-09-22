@@ -347,7 +347,7 @@ class Timeline:
         self.checkGlobalOptions()
         self.checkAllAgentOptions()
 
-        # Acquire the bandwidth and throttling schedule
+
 
         # Now we've collected the following information:
         #   . Interval of backups
