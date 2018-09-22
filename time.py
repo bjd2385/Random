@@ -71,6 +71,7 @@ TRANSFERS_DONE    = '.transfers'        # `transfer`
 SPEED_LIMIT = '/datto/config/local/speedLimit' # Upload speed limit
 
 NOW = datetime.datetime.now()
+_WARN = partial(warnings.warn, stacklevel=2, category=RuntimeWarning)
 
 
 def getIO(command: str) -> List[str]:
@@ -299,22 +300,22 @@ class Timeline:
 
     def __init__(self, arguments: argparse.Namespace) -> None:
         # Get a master list of ZFS datasets/agents.
-        self.agents = list(getIO(ZFS_agent_list))
+        self.masterAgents = getIO(ZFS_agent_list)
 
-        # Check the requested agents against absolute list of agents
+        # Check the requested agents against master list of agents
         if arguments.agents:
             arguments.agents = flatten(arguments.agents)
             for uuid in arguments.agents:
-                if uuid not in self.agents:
-                    warnings.warn(uuid + ' is not in the dataset, excluding',
-                                  stacklevel=2, category=RuntimeWarning)
+                if uuid not in self.masterAgents:
+                    _WARN(uuid + ' is not in the dataset, excluding')
                     arguments.agents.remove(uuid)
             if not arguments.agents:
-                warnings.warn('Defaulting to complete dataset')
-                arguments.agents = self.agents
+                _WARN('Defaulting to complete dataset')
+                arguments.agents = self.masterAgents
         else:
-            arguments.agents = self.agents
-
+            arguments.agents = self.masterAgents
+        
+        self.agents = arguments.agents
         self.agent_identifiers = list(map(basename, arguments.agents))
 
         # Grab data about snapshots and retention policies
@@ -329,18 +330,14 @@ class Timeline:
         ))
 
         # Decode schedules and store them in a list.
-        schedules = []
-        for agent in self.agent_identifiers:
-            schedules.append(
-                self.JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE)
-            )
+        self.schedules = self._acquireSchedules()
 
         # Map these schedules to a function that'll find all the hours we're
         # taking backups. This is the same as
         # cat /datto/config/keys/*.schedule | grep -oP "[0-9]+(?=;s:1:\"0\")"
-        backupHours = list(map(
-            partial(JSONdecoder.findAll, key='0', byValue=True),
-            schedules
+        self.backupHours = list(map(
+            partial(self.JSONdecoder.findAll, key='0', byValue=True),
+            self.schedules
         ))
 
         # Collect interval of backups.
@@ -390,6 +387,17 @@ class Timeline:
                 warnings.warn(agent + ' has no snapshots, excluding',
                               stacklevel=2, category=RuntimeWarning)
                 self.agent_identifiers.remove(agent)
+
+    def _acquireSchedules(self) -> List[Dict[int, int]]:
+        """
+        Get a list of schedules, which are dictionaries of Hour -> True/False.
+        """
+        schedules = []
+        for agent in self.agent_identifiers:
+            self.schedules.append(
+                self.JSONdecoder.decode(KEYS + agent + LOCAL_SCHEDULE)
+            )
+        return schedules
 
 
 if __name__ == '__main__':
