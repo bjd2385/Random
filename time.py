@@ -315,7 +315,7 @@ class Timeline:
 
         self.agent_identifiers = list(map(basename, arguments.agents))
 
-    
+
 
 
 def main(arguments: argparse.Namespace) -> None:
