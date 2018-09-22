@@ -91,26 +91,6 @@ def getIO(command: str) -> List[str]:
     return stdout
 
 
-def getSnapshots(agent: str) -> Dict[int, str]:
-    """
-    Get a list of snapshots from a particular agent.
-    """
-    snapshots = getIO(ZFS_list_snapshots + ' ' + agent)[:-1]
-
-    for i, snapshot in enumerate(snapshots):
-        snapshots[i] = re.split(spaces, snapshot)
-        
-        # Pull out relevant data for readability
-        epochInt = int(re.search(epoch, snapshot).group())
-        compressRatio = float(snapshots[i][2][:-1])
-        epochSize = int(snapshots[i][1])
-
-        # Reorganize this list as [epoch, transfer size]
-        snapshots[i] = [epochInt, int(epochSize * compressRatio)]
-
-    return dict(snapshots)
-
-
 def flatten(inList: List[List]) -> List:
     """
     Similar to Haskell's `concat :: [[a]] -> [a]`.
@@ -298,7 +278,7 @@ class Timeline:
         self.agent_identifiers = list(map(basename, arguments.agents))
 
         # Grab data about snapshots and retention policies.
-        self.snaps = list(map(getSnapshots, self.agents))
+        self.snaps = list(map(self.getSnapshots, self.agents))
         self._checkSnaps()
 
         # Grab retention policies.
@@ -409,6 +389,9 @@ class Timeline:
         if not self.agent_identifiers:
             raise PausedTransfers('Agents are all individually paused')
 
+    def run(self) -> str:
+        ...
+
     @staticmethod
     def decodeRetention(agent: str, offsite: bool = False) -> List[int]:
         """
@@ -429,6 +412,31 @@ class Timeline:
         # total: 1w - 7y, or up to ~27 years, again
 
         return [intra, daily, weekly, total]
+
+    @staticmethod
+    def getSnapshots(agent: str) -> Dict[int, str]:
+        """
+        Get a list of snapshots from a particular agent.
+        """
+        snapshots = getIO(ZFS_list_snapshots + ' ' + agent)[:-1]
+
+        for i, snapshot in enumerate(snapshots):
+            snapshots[i] = re.split(spaces, snapshot)
+
+            # Pull out relevant data for readability
+            epochInt = int(re.search(epoch, snapshot).group())
+            compressRatio = float(snapshots[i][2][:-1])
+            epochSize = int(snapshots[i][1])
+
+            # Reorganize this list as [epoch, transfer size]
+            snapshots[i] = [epochInt, int(epochSize * compressRatio)]
+
+        return dict(snapshots)
+    
+
+def main(args: argparse.Namespace) -> None:
+    time = Timeline(args)
+    sys.stdout.write(time.run())
 
 
 if __name__ == '__main__':
