@@ -349,7 +349,9 @@ class Timeline:
             raise PausedTransfers('Agents are all individually paused')
 
     def run(self) -> str:
-        ...
+        """
+        Run the hourly loop and make the determination as to when
+        """
 
     @staticmethod
     def decodeRetention(agent: str, offsite: bool = False) -> List[int]:
@@ -391,8 +393,6 @@ class Timeline:
             snapshots[i] = [epochInt, int(epochSize * compressRatio)]
 
         return dict(snapshots)
-
-
 
 
 def getIO(command: str) -> List[str]:
