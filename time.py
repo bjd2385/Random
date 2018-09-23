@@ -269,7 +269,7 @@ class Timeline:
         self.checkGlobalOptions()
         self.checkAllAgentOptions()
 
-
+        
 
         # Now we've collected the following information:
         #   . Interval of backups
@@ -391,6 +391,8 @@ class Timeline:
             snapshots[i] = [epochInt, int(epochSize * compressRatio)]
 
         return dict(snapshots)
+
+
 
 
 def getIO(command: str) -> List[str]:
