@@ -269,7 +269,7 @@ class Timeline:
         self.checkGlobalOptions()
         self.checkAllAgentOptions()
 
-        
+
 
         # Now we've collected the following information:
         #   . Interval of backups
