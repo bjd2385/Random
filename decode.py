@@ -11,16 +11,6 @@ import os
 import re
 
 
-# Match these 'tokens'
-integer = r'^i:[0-9]+;?'
-string  = r'^s:[0-9]+:\"[^\"]*\";?'
-array   = r'^a:[0-9]+:{'
-boolean = r'^b:[01];?'
-endArr  = r'^}'
-
-lexer = re.compile('({}|{}|{}|{}|{})'.format(integer, string, array, endArr,
-                                             boolean))
-
 # `:' between parentheses will break unpacking if we just `.split(':')`
 colonStringSplit = re.compile(r'(?<=s):|:(?=")')
 
