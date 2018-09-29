@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 """
-Decode our JSON compressed format.
+Decode JSON serialized.
 """
 
 from typing import Dict, List, Optional, Any
