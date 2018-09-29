@@ -11,10 +11,6 @@ import os
 import re
 
 
-# `:' between parentheses will break unpacking if we just `.split(':')`
-colonStringSplit = re.compile(r'(?<=s):|:(?=")')
-
-
 class InvalidArrayFormat(SyntaxError):
     """
     Raised when the input "compressed" JSON format is invalid.
