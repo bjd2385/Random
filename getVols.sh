@@ -1,13 +1,40 @@
 #! /bin/bash
-# Print information about snapshots in /home/agents/*/.zfs/snapshot/, such as 
-# included volumes, etc. This script is useful/unique because it allows us to
-# compare information that was included with each snapshot as a list in the
-# terminal.
+# Print information about snapshots in /home/agents/*/.zfs/snapshot/, 
+# such as included volumes, etc. This script is useful/unique because 
+# it allows us to compare information that was included with each 
+# snapshot as a list in the terminal.
+#
+# Script defaults to showing just included volumes, unless otherwise
+# specified.
 #
 # Syntax verified with shellcheck v0.5.0
 # https://github.com/koalaman/shellcheck
 #
 # Brandon Doyle, October 7, 2018
+
+
+usage()
+{
+    printf "-h: Print this help message\\n" 1>&2
+}
+
+
+##
+# Get the 
+acquireOpts()
+{
+    # Unfortunately, `getopts` only supports single character flags.
+    local opt
+    while getopts ":h" opt
+    do
+        case "$opt" in
+            "-h") usage
+                ;;
+            \?) printf "Invalid option provided: %s" "$opt" 1>&2
+                ;;
+        esac
+    done
+}
 
 
 ##
@@ -20,7 +47,7 @@ getUUID()
     # Let's create our own that respects column widths.
     for agent in /home/agents/*
     do
-        id="${agent##*/}"
+        local id="${agent##*/}"
         # Redirect to stderr so we can pipe this whole script to `column` 
         # independently.
         printf "%s,%s\\n" "$id" "$(grep -oP \
@@ -34,7 +61,7 @@ getUUID()
     if [ "$agents" -eq 0 ]
     then
         printf "No agents found" 1>&2
-        exit 1
+        return
     fi
 
     # Get user input, now that we've provided them with their options.
@@ -65,7 +92,7 @@ getSnapshots()
     if [ "$#" -ne  1 ]
     then
         printf "getSnapshots() requires 1 argument, received %d\\n" "$#" 1>&2
-        exit 1
+        return
     fi
 
     local UUID="$1"
@@ -74,7 +101,7 @@ getSnapshots()
     if ! [ -d "/home/agents/$UUID" ]
     then
         printf "ERROR: \"%s\" doesn't exist\\n" "$UUID" 1>&2
-        exit 1
+        return
     fi
 
     # Loop over this agent's snapshots and list included directories.
@@ -86,6 +113,8 @@ getSnapshots()
         then
             convertedDate="$(date -d@"$timestamp")"
             printf "%s: " "$convertedDate"
+
+            # Volumes
             volt="$epoch/voltab"
 
             if [ -e "$volt" ]
@@ -102,6 +131,8 @@ getSnapshots()
             else 
                 printf "voltab doesn't exist\\n"
             fi
+
+            # 
         else
             printf "No snapshots\\n"
         fi
@@ -109,5 +140,13 @@ getSnapshots()
 }
 
 
+acquireOpts
 getUUID
+
+# Cleanup local environment
+unset -f getUUID
+unset -f getSnapshots
+unset -f usage
+unset -f acquireOpts
+
 exit 0
