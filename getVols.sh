@@ -23,10 +23,13 @@ getUUID()
         id="${agent##*/}"
         # Redirect to stderr so we can pipe this whole script to `column` 
         # independently.
-        printf "%s,%s\\n" "$id" "$(grep -oP "\"hostName\";s:[0-9]+:\"\\K[^\"]+" "/datto/config/keys/$id.agentInfo")"
+        printf "%s,%s\\n" "$id" "$(grep -oP \
+            "\"hostName\";s:[0-9]+:\"\\K[^\"]+" \
+            "/datto/config/keys/$id.agentInfo")"
     done | column -s ',' -t 1>&2
 
-    agents="$(find /home/agents/ -maxdepth 1 -mindepth 1 -type d | wc -l)"
+    local agents="$(find /home/agents/ -maxdepth 1 -mindepth 1 -type d \
+        | wc -l)"
 
     if [ "$agents" -eq 0 ]
     then
@@ -44,7 +47,7 @@ getUUID()
         # Ensure this is a valid identifier
         if ! [ -d "/home/agents/$UUID" ]
         then
-            printf "ERROR \"%s\" does not exist on this system\\n" "$UUID" 1>&2
+            printf "ERROR: \"%s\" doesn't exist\\n" "$UUID" 1>&2
             continue
         else
             break
@@ -70,7 +73,7 @@ getSnapshots()
     # Ensure it's a valid id (again, for safety)
     if ! [ -d "/home/agents/$UUID" ]
     then
-        printf "ERROR: \"%s\" does not exist on this system\\n" "$UUID" 1>&2
+        printf "ERROR: \"%s\" doesn't exist\\n" "$UUID" 1>&2
         exit 1
     fi
 
@@ -87,7 +90,9 @@ getSnapshots()
 
             if [ -e "$volt" ]
             then 
-                match="$(grep -oP "(?<=(\"mountpoint\":\"))[A-Z]" "$volt" | awk '{ printf "%s:\\ ",$0,NR % 7 ? " " : "\n"; }')"
+                match="$(grep -oP "(?<=(\"mountpoint\":\"))[A-Z]" "$volt" \
+                    | awk '{ printf "%s:\\ ",$0,NR % 7 ? " " : "\n"; }')"
+
                 if ! [ "$match" ]
                 then 
                     printf "* No volumes included in voltab\\n"
