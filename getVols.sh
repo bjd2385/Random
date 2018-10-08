@@ -1,5 +1,10 @@
 #! /bin/bash
-# Print a list of included volumes in snapshots as a list.
+# Print information about snapshots in /home/agents/*/.zfs/snapshot/, such as 
+# included volumes, etc.
+#
+# Syntax verified with shellcheck v0.5.0
+# https://github.com/koalaman/shellcheck
+#
 # Brandon Doyle, October 7, 2018
 
 
@@ -35,7 +40,7 @@ getUUID()
         # Ensure this is a valid identifier
         if ! [ -d "/home/agents/$UUID" ]
         then
-            printf "ERROR \"$UUID\" does not exist on this system\\n" 1>&2
+            printf "ERROR \"%s\" does not exist on this system\\n" "$UUID" 1>&2
             continue
         else
             break
@@ -52,7 +57,7 @@ getSnapshots()
 {
     if [ "$#" -ne  1 ]
     then
-        printf "getSnapshots() requires 1 argument, received $#\\n" 1>&2
+        printf "getSnapshots() requires 1 argument, received %d\\n" "$#" 1>&2
         exit 1
     fi
 
@@ -61,7 +66,7 @@ getSnapshots()
     # Ensure it's a valid id (again, for safety)
     if ! [ -d "/home/agents/$UUID" ]
     then
-        printf "ERROR: \"$UUID\" does not exist on this system\\n" 1>&2
+        printf "ERROR: \"%s\" does not exist on this system\\n" "$UUID" 1>&2
         exit 1
     fi
 
