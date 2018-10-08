@@ -1,6 +1,8 @@
 #! /bin/bash
 # Print information about snapshots in /home/agents/*/.zfs/snapshot/, such as 
-# included volumes, etc.
+# included volumes, etc. This script is useful/unique because it allows us to
+# compare information that was included with each snapshot as a list in the
+# terminal.
 #
 # Syntax verified with shellcheck v0.5.0
 # https://github.com/koalaman/shellcheck
@@ -19,8 +21,10 @@ getUUID()
     for agent in /home/agents/*
     do
         id="${agent##*/}"
+        # Redirect to stderr so we can pipe this whole script to `column` 
+        # independently.
         printf "%s,%s\\n" "$id" "$(grep -oP "\"hostName\";s:[0-9]+:\"\\K[^\"]+" "/datto/config/keys/$id.agentInfo")"
-    done | column -s ',' -t 1>&2 # Redirect to stderr so we can pipe this whole script to `column` independently
+    done | column -s ',' -t 1>&2
 
     agents="$(find /home/agents/ -maxdepth 1 -mindepth 1 -type d | wc -l)"
 
