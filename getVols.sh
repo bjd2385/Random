@@ -1,7 +1,7 @@
 #! /bin/bash
-# Print information about snapshots in /home/agents/*/.zfs/snapshot/, 
-# such as included volumes, etc. This script is useful/unique because 
-# it allows us to compare information that was included with each 
+# Print information about snapshots in /home/agents/*/.zfs/snapshot/,
+# such as included volumes, etc. This script is useful/unique because
+# it allows us to compare information that was included with each
 # snapshot as a list in the terminal.
 #
 # Script defaults to showing just included volumes, unless otherwise
@@ -13,14 +13,19 @@
 # Brandon Doyle, October 7, 2018
 
 
+##
+# Print usage information.
 usage()
 {
-    printf "-h: Print this help message\\n" 1>&2
+    printf "usage: getVols.sh args ...\\n" 1>&2
+    printf "where 'args' is one of the following\\n\\n" 1>&2
+    printf "\\t-h: Print this help message\\n" 1>&2
+    printf "\\t" 1>&2
 }
 
 
 ##
-# Get the 
+# Parse arguments from user.
 acquireOpts()
 {
     # Unfortunately, `getopts` only supports single character flags.
@@ -44,12 +49,11 @@ getUUID()
     # Is this sustainable?
     #local agents="$(snapctl list 2>&1)"
 
-    # Let's create our own that respects column widths.
+    # Let's create our own that respects column widths. Redirect to
+    # stderr so we can pipe this whole script to `column` independently.
     for agent in /home/agents/*
     do
         local id="${agent##*/}"
-        # Redirect to stderr so we can pipe this whole script to `column` 
-        # independently.
         printf "%s,%s\\n" "$id" "$(grep -oP \
             "\"hostName\";s:[0-9]+:\"\\K[^\"]+" \
             "/datto/config/keys/$id.agentInfo")"
@@ -106,8 +110,8 @@ getSnapshots()
 
     # Loop over this agent's snapshots and list included directories.
     for epoch in /home/agents/"$UUID"/.zfs/snapshot/*
-    do 
-        timestamp="$(echo "$epoch" | grep -oP "[0-9]+$")" 
+    do
+        timestamp="$(echo "$epoch" | grep -oP "[0-9]+$")"
 
         if [ "$timestamp" ]
         then
@@ -118,21 +122,21 @@ getSnapshots()
             volt="$epoch/voltab"
 
             if [ -e "$volt" ]
-            then 
+            then
                 match="$(grep -oP "(?<=(\"mountpoint\":\"))[A-Z]" "$volt" \
                     | awk '{ printf "%s:\\ ",$0,NR % 7 ? " " : "\n"; }')"
 
                 if ! [ "$match" ]
-                then 
+                then
                     printf "* No volumes included in voltab\\n"
-                else 
+                else
                     printf "%s\\n" "$match"
                 fi
-            else 
+            else
                 printf "voltab doesn't exist\\n"
             fi
 
-            # 
+            #
         else
             printf "No snapshots\\n"
         fi
