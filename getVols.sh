@@ -15,19 +15,32 @@ getUUID()
     do
         id="${agent##*/}"
         printf "%s,%s\\n" "$id" "$(grep -oP "\"hostName\";s:[0-9]+:\"\\K[^\"]+" "/datto/config/keys/$id.agentInfo")"
-    done | column -s ',' -t 1>&2 # Redirect to stderr so we can pipe this whole script to `column`
+    done | column -s ',' -t 1>&2 # Redirect to stderr so we can pipe this whole script to `column` independently
 
     agents="$(find /home/agents/ -maxdepth 1 -mindepth 1 -type d | wc -l)"
 
     if [ "$agents" -eq 0 ]
     then
         printf "No agents found" 1>&2
-        return
+        exit 1
     fi
 
     # Get user input, now that we've provided them with their options.
     local UUID
-    read -r -p "Enter UUID: " UUID
+
+    while true
+    do
+        read -r -p "Enter UUID: " UUID
+
+        # Ensure this is a valid identifier
+        if ! [ -d "/home/agents/$UUID" ]
+        then
+            printf "ERROR \"$UUID\" does not exist on this system\\n" 1>&2
+            continue
+        else
+            break
+        fi
+    done
 
     getSnapshots "$UUID"
 }
@@ -40,15 +53,16 @@ getSnapshots()
     if [ "$#" -ne  1 ]
     then
         printf "getSnapshots() requires 1 argument, received $#\\n" 1>&2
-        return
+        exit 1
     fi
 
     local UUID="$1"
 
-    # Ensure this is a valid identifier
+    # Ensure it's a valid id (again, for safety)
     if ! [ -d "/home/agents/$UUID" ]
     then
-        printf "$UUID does not exist on this system" 1>&2
+        printf "ERROR: \"$UUID\" does not exist on this system\\n" 1>&2
+        exit 1
     fi
 
     # Loop over this agent's snapshots and list included directories.
@@ -82,3 +96,4 @@ getSnapshots()
 
 
 getUUID
+exit 0
