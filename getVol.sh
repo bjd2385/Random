@@ -74,7 +74,7 @@ getSnapshots()
     if [ "$#" -ne  1 ]
     then
         printf "getSnapshots() requires 1 argument, received %d\\n" "$#" 1>&2
-        return
+        return 1
     fi
 
     local UUID="$1"
@@ -83,7 +83,7 @@ getSnapshots()
     if ! [ -d "/home/agents/$UUID" ]
     then
         printf "ERROR: \"%s\" doesn't exist\\n" "$UUID" 1>&2
-        return
+        return 1
     fi
 
     # Loop over this agent's snapshots and list included directories.
@@ -94,16 +94,16 @@ getSnapshots()
         if [ "$timestamp" ]
         then
             convertedDate="$(date -d@"$timestamp")"
-            printf "%s: " "$convertedDate"
+            printf "%s - " "$convertedDate"
 
             # Volumes
             volt="$epoch/voltab"
 
             if [ -e "$volt" ]
-            then 
+            then
                 # Match and output all volumes on the same line.
                 match="$(grep -oP "(?<=(\"mountpoint\":\"))[A-Z]" "$volt" \
-                    | awk '{ printf "%s:\\ ",$0,NR % 7 ? " " : "\n"; }')"
+                    | awk '{ printf "%s:\\ ",$0; }')"
 
                 if ! [ "$match" ]
                 then 
@@ -114,8 +114,6 @@ getSnapshots()
             else 
                 printf "voltab doesn't exist\\n"
             fi
-
-            # 
         else
             printf "No snapshots\\n"
         fi
